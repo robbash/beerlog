@@ -1,0 +1,131 @@
+{
+  "app": {
+    "title": "BeerLog"
+  },
+  "pages": {
+    "dashboard": {
+      "loginHint": "Please log in to get started."
+    },
+    "login": {
+      "title": "Login",
+      "subtitle": "Please enter your credentials to sign in",
+      "form": {
+        "email": "Email",
+        "emailPlaceholder": "me@example.com",
+        "password": "Password"
+      },
+      "button": {
+        "signIn": "Sign in",
+        "forgotPassword": "Forgot Password"
+      }
+    },
+    "register": {
+      "title": "Register",
+      "subtitle": "Please fill out the form to create an account.",
+      "form": {
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "emailPlaceholder": "me@example.com",
+        "password": "Password",
+        "passwordConfirmation": "Confirm password"
+      },
+      "button": {
+        "submit": "Register"
+      }
+    },
+    "beerLog": {
+      "title": {
+        "add": "Track your drinks",
+        "edit": "Edit log"
+      },
+      "description": {
+        "add": "Add the details for a new beerlog item.",
+        "edit": "You can update the details below."
+      },
+      "form": {
+        "date": "Date",
+        "quantity": "Quantity",
+        "userId": "User",
+        "userIdPlaceholder": "Select a user"
+      },
+      "button": {
+        "submit": "Submit",
+        "cancel": "Cancel"
+      }
+    }
+  },
+  "components": {
+    "dashboardStats": {
+      "cards": {
+        "total": {
+          "title": "Total"
+        },
+        "prevMonth": {
+          "title": "Previous month"
+        },
+        "thisMonth": {
+          "title": "This month",
+          "trendUp": "Up {percent}% this month",
+          "trendDown": "Down {percent}% this month"
+        },
+        "logRecord": {
+          "title": "Log beers consumed"
+        }
+      }
+    },
+    "dashboardTable": {
+      "caption": "A list of your recent beverage logs.",
+      "headers": {
+        "date": "Date",
+        "quantity": "Quantity",
+        "status": "Status",
+        "actions": ""
+      }
+    },
+    "usersTable": {
+      "caption": "A list of all registered users.",
+      "headers": {
+        "name": "Name",
+        "email": "Email",
+        "approved": "Approved",
+        "mfaEnabled": "MFA Enabled",
+        "actions": ""
+      },
+      "actions": {
+        "approve": "Approve",
+        "unapprove": "Unapprove",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "confirmDelete": {
+        "title": "Delete user",
+        "description": "Are you sure you want to delete the user? This cannot be undone!",
+        "button": {
+          "cancel": "Cancel",
+          "confirm": "Confirm"
+        }
+      }
+    }
+  },
+  "navigation": {
+    "login": "Login",
+    "logout": "Logout",
+    "users": "Users"
+  },
+  "formFooter": {
+    "hint": "Cheers"
+  },
+  "errors": {
+    "password": {
+      "minLength": "Password must have ${length} characters",
+      "specialCharacter": "Password must contain atleast one special character",
+      "lowerCase": "Password must contain at least one lowercase letter",
+      "upperCase": "Password must contain at least one uppercase letter",
+      "number": "Password must contain at least one number",
+      "match": "Password must match"
+    },
+    "userExists": "The email cannot be taken",
+    "registrationFailed": "Registration failed. Please contact the support."
+  }
+}
