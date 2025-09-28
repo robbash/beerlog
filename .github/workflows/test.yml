@@ -1,0 +1,20 @@
+name: CI-TEST
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Checkout code
+        uses: actions/checkout@v4
+      -
+        name: Campare locale files
+        run: |
+          # Compare locale message
+          jq -r 'paths(scalars) | join(".")' messages/en.json | sort > en.keys
+          jq -r 'paths(scalars) | join(".")' messages/de.json | sort > de.keys
+          diff -u en.keys de.keys
+
