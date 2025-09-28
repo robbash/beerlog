@@ -1,14 +1,21 @@
+'use client';
+
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslations } from 'next-intl';
-import { signIn } from '@/lib/auth';
-import { AuthError } from 'next-auth';
 import Link from 'next/link';
+import { useFormState } from 'react-dom';
+import { AlertCircleIcon } from 'lucide-react';
+import { Alert, AlertDescription } from '../ui/alert';
+import { loginAction } from '@/app/actions/user';
 
 export function LoginForm() {
+  const [state, formAction] = useFormState(loginAction, { error: undefined });
+
   const t = useTranslations('pages.login');
+  const tError = useTranslations('errors');
 
   return (
     <Card>
@@ -17,22 +24,16 @@ export function LoginForm() {
         <CardDescription>{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form
-          action={async (formData) => {
-            'use server';
-
-            try {
-              await signIn('credentials', formData);
-            } catch (error) {
-              if (error instanceof AuthError) {
-                // return redirect(`${SIGNIN_ERROR_URL}?error=${error.type}`)
-              }
-
-              throw error;
-            }
-          }}
-        >
+        <form action={formAction}>
           <div className="grid gap-6">
+            {state.error && (
+              <div className="grid gap-3">
+                <Alert variant="destructive">
+                  <AlertCircleIcon />
+                  <AlertDescription>{tError(state.error)}</AlertDescription>
+                </Alert>
+              </div>
+            )}
             <div className="grid gap-3">
               <Label htmlFor="email">{t(`form.email`)}</Label>
               <Input

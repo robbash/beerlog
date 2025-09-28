@@ -126,6 +126,7 @@
       "number": "Password must contain at least one number",
       "match": "Password must match"
     },
+    "invalidCredentials": "The login details are invalid",
     "userExists": "The email cannot be taken",
     "registrationFailed": "Registration failed. Please contact the support."
   }

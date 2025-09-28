@@ -126,6 +126,7 @@
       "number": "Das Passwort muss mindestens eine Zahl enthalten",
       "match": "Die Passwörter müssen übereinstimmen"
     },
+    "invalidCredentials": "Die Anmeldedaten sind nicht gültig.",
     "userExists": "Diese E-Mail kann nicht verwendet werden.",
     "registrationFailed": "Registrierung fehlgeschlagen. Bitte den Support kontaktieren."
   }

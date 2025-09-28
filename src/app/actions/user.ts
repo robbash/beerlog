@@ -1,7 +1,27 @@
 'use server';
 
+import { signIn } from '@/lib/auth';
 import { sendEmail } from '@/lib/email';
 import { prisma } from '@/lib/prisma';
+
+export type LoginFormState = {
+  error: string | undefined;
+};
+
+export async function loginAction(_: LoginFormState, formData: FormData): Promise<LoginFormState> {
+  'use server';
+
+  try {
+    await signIn('credentials', formData);
+
+    return { error: undefined };
+  } catch (error) {
+    // if (error instanceof AuthError) {
+    // return redirect(`${SIGNIN_ERROR_URL}?error=${error.type}`)
+    // }
+    return { error: 'invalidCredentials' };
+  }
+}
 
 export async function userEmailExists(email: string) {
   const user = await prisma.user.findFirst({ where: { email } });
