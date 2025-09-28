@@ -1,0 +1,14 @@
+resources:
+- deployment.yaml
+- service.yaml
+- ingress.yaml
+- configmap.yaml
+
+labels:
+  - pairs:
+      app: beerlog
+
+namePrefix:
+  beerlog-
+
+namespace: beerlog

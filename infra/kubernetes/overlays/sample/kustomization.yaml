@@ -1,0 +1,12 @@
+resources:
+- ../../base
+
+namespace: beerlog-sample
+
+patches:
+- target:
+    kind: Ingress
+    name: ingress
+  path: ingress.json
+- path: replicas.yaml
+- path: configmap.yaml

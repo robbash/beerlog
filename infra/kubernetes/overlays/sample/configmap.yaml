@@ -1,0 +1,6 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dotenv
+data:
+  APP_NAME: BeerLog Sample

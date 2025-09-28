@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: beerlog
+  template:
+    metadata:
+      labels:
+        app: beerlog
+    spec:
+      containers:
+      - name: beerlog
+        image: ghcr.io/robbash/beerlog:0.1.0
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+        envFrom:
+        - configMapRef:
+            name: beerlog-dotenv
+        - secretRef:
+            name: beerlog-dotenv-secrets
+      imagePullSecrets:
+      - name: regcred
