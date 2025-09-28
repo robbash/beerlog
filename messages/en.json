@@ -111,6 +111,7 @@
   "navigation": {
     "login": "Login",
     "logout": "Logout",
+    "register": "Register",
     "users": "Users"
   },
   "formFooter": {

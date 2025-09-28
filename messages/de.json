@@ -111,6 +111,7 @@
   "navigation": {
     "login": "Anmelden",
     "logout": "Abmelden",
+    "register": "Registrieren",
     "users": "Benutzer"
   },
   "formFooter": {

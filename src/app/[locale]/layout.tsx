@@ -63,9 +63,15 @@ export default async function Layout({
                     </form>
                   </div>
                 ) : (
-                  <Link href={`/${locale}/login`}>
-                    <Button>Login</Button>
-                  </Link>
+                  <>
+                    <Link href={`/${locale}/register`}>
+                      <Button variant="ghost">{t('navigation.register')}</Button>
+                    </Link>
+
+                    <Link href={`/${locale}/login`}>
+                      <Button>Login</Button>
+                    </Link>
+                  </>
                 )}
               </nav>
             </div>

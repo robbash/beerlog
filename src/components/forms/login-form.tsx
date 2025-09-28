@@ -40,14 +40,13 @@ export function LoginForm() {
                 type={'email'}
                 placeholder={t(`form.emailPlaceholder`)}
                 required
-                value="admin@example.com"
               />
             </div>
             <div className="grid gap-3">
               <div className="flex items-center">
                 <Label htmlFor="password">{t('form.password')}</Label>
               </div>
-              <Input name="password" type="password" required value="admin123" />
+              <Input name="password" type="password" required />
             </div>
             <Button type="submit" className="w-full">
               {t('button.signIn')}
