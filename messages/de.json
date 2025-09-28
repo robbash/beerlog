@@ -1,3 +1,131 @@
 {
-  "app":{"title": "BeerLog"}
+  "app": {
+    "title": "BeerLog"
+  },
+  "pages": {
+    "dashboard": {
+      "loginHint": "Bitte melde dich an um loszulegen."
+    },
+    "login": {
+      "title": "Login",
+      "subtitle": "Bitte gib deine Zugangsdaten ein.",
+      "form": {
+        "email": "E-Mail",
+        "emailPlaceholder": "me@example.com",
+        "password": "Passwort"
+      },
+      "button": {
+        "signIn": "Anmelden",
+        "forgotPassword": "Passwort vergessen"
+      }
+    },
+    "register": {
+      "title": "Registrierung",
+      "subtitle": "Bitte fülle das Formular aus um einen neuen Account anzulegen.",
+      "form": {
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "email": "E-Nail",
+        "emailPlaceholder": "me@example.com",
+        "password": "Passwort",
+        "passwordConfirmation": "Passwort bestätigen"
+      },
+      "button": {
+        "submit": "Registrieren"
+      }
+    },
+    "beerLog": {
+      "title": {
+        "add": "Gibt deine Getränke an",
+        "edit": "Eintrag bearbeiten"
+      },
+      "description": {
+        "add": "Fülle die Details aus.",
+        "edit": "Du kannst die Details bearbeiten."
+      },
+      "form": {
+        "date": "Datum",
+        "quantity": "Anzahl",
+        "userId": "Benuzter",
+        "userIdPlaceholder": "Wähle einen Benutzer aus"
+      },
+      "button": {
+        "submit": "Absenden",
+        "cancel": "Abbrechen"
+      }
+    }
+  },
+  "components": {
+    "dashboardStats": {
+      "cards": {
+        "total": {
+          "title": "Gesamt"
+        },
+        "prevMonth": {
+          "title": "Vorheriger Monat"
+        },
+        "thisMonth": {
+          "title": "Dieser Monat",
+          "trendUp": "Anstiegt um {percent}%",
+          "trendDown": "Abnahme {percent}%"
+        },
+        "logRecord": {
+          "title": "Verbuche weitere Getränke"
+        }
+      }
+    },
+    "dashboardTable": {
+      "caption": "Liste deiner letzten Getränkebuchungen",
+      "headers": {
+        "date": "Datum",
+        "quantity": "Anzahl",
+        "status": "Status",
+        "actions": ""
+      }
+    },
+    "usersTable": {
+      "caption": "Liste aller Benutzer",
+      "headers": {
+        "name": "Name",
+        "email": "E-Nail",
+        "approved": "Bestätigt",
+        "mfaEnabled": "MFA aktiviert",
+        "actions": ""
+      },
+      "actions": {
+        "approve": "Bestätigen",
+        "unapprove": "Bestätigung entfernen",
+        "edit": "Bearbeiten",
+        "delete": "Entfernen"
+      },
+      "confirmDelete": {
+        "title": "Benutzer entfernen",
+        "description": "Bist du sicher, dass du den Benutzer entfernen möchtest? Das lässt sich nicht rückgängig machen!",
+        "button": {
+          "cancel": "Abbrechen",
+          "confirm": "Bestätigen"
+        }
+      }
+    }
+  },
+  "navigation": {
+    "login": "Anmelden",
+    "logout": "Abmelden",
+    "users": "Benutzer"
+  },
+  "formFooter": {
+    "hint": "Zum Wohl"
+  },
+  "errors": {
+    "password": {
+      "minLength": "Das Passwort muss mindestens ${length} Zeichen lang sein",
+      "specialCharacter": "Das Passwort muss mindestens ein Sonderzeichen enthalten",
+      "lowerCase": "Das Passwort muss mindestens einen Kleinbuchstaben enthalten",
+      "upperCase": "Das Passwort muss mindestens einen Großbuchstaben enthalten",
+      "number": "Das Passwort muss mindestens eine Zahl enthalten",
+      "match": "Die Passwörter müssen übereinstimmen"
+    },
+    "userExists": "Diese E-Mail kann nicht verwendet werden.",
+    "registrationFailed": "Registrierung fehlgeschlagen. Bitte den Support kontaktieren."
+  }
 }

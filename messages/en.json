@@ -119,7 +119,7 @@
   "errors": {
     "password": {
       "minLength": "Password must have ${length} characters",
-      "specialCharacter": "Password must contain atleast one special character",
+      "specialCharacter": "Password must contain at least one special character",
       "lowerCase": "Password must contain at least one lowercase letter",
       "upperCase": "Password must contain at least one uppercase letter",
       "number": "Password must contain at least one number",
