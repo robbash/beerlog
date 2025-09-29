@@ -74,10 +74,15 @@
         }
       }
     },
+    "dashboardToggle": {
+      "showOwn": "Nur eigene anzeigen",
+      "showAll": "Für alle anzeigen"
+    },
     "dashboardTable": {
       "caption": "Liste deiner letzten Getränkebuchungen",
       "headers": {
         "date": "Datum",
+        "user": "Benutzer",
         "quantity": "Anzahl",
         "status": "Status",
         "actions": ""

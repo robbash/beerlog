@@ -74,10 +74,15 @@
         }
       }
     },
+    "dashboardToggle": {
+      "showOwn": "Only display own consuption.",
+      "showAll": "Display consumption for all users"
+    },
     "dashboardTable": {
       "caption": "A list of your recent beverage logs.",
       "headers": {
         "date": "Date",
+        "user": "User",
         "quantity": "Quantity",
         "status": "Status",
         "actions": ""

@@ -1,6 +1,6 @@
 {
   "name": "beerlog-next",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
@@ -20,6 +20,8 @@
     "@radix-ui/react-popover": "^1.1.15",
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-toggle": "^1.1.10",
+    "@radix-ui/react-toggle-group": "^1.1.11",
     "@tabler/icons-react": "^3.34.1",
     "bcryptjs": "^3.0.2",
     "class-variance-authority": "^0.7.1",

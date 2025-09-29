@@ -7,7 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { BeerLog } from '@prisma/client';
+import { BeerLog, User } from '@prisma/client';
 import { IconCurrencyEuro, IconCurrencyEuroOff, IconEdit } from '@tabler/icons-react';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Button } from './ui/button';
@@ -16,10 +16,11 @@ import { formatDateTime } from '@/lib/utils/date';
 
 interface Props {
   logs: BeerLog[];
+  users?: User[];
 }
 
 export async function DashboardTable(props: Props) {
-  const { logs = [] } = props;
+  const { logs = [], users } = props;
 
   const locale = await getLocale();
 
@@ -31,6 +32,7 @@ export async function DashboardTable(props: Props) {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">{t('headers.date')}</TableHead>
+          {users && <TableHead>{t('headers.user')}</TableHead>}
           <TableHead>{t('headers.quantity')}</TableHead>
           <TableHead>{t('headers.status')}</TableHead>
           <TableHead className="text-right">{t('headers.actions')}</TableHead>
@@ -38,10 +40,17 @@ export async function DashboardTable(props: Props) {
       </TableHeader>
       <TableBody>
         {logs.map((log) => {
+          const user = users?.find((user) => user.id === log.userId);
+
           return (
             <TableRow key={log.id}>
               <TableCell className="font-medium">{formatDateTime(log.date)}</TableCell>
               <TableCell>{log.quantity}</TableCell>
+              {users && (
+                <TableCell>
+                  {user?.firstName} {user?.lastName}
+                </TableCell>
+              )}
               <TableCell>
                 {log.isPaidFor ? (
                   <IconCurrencyEuro />

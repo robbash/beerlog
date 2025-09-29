@@ -1,11 +1,17 @@
 import { DashboardStats } from '@/components/dashboard-stats';
 import { DashboardTable } from '@/components/dashboard-table';
+import { DashboardToggle } from '@/components/dashboard-toggle';
 import { auth } from '@/lib/auth';
+import { Roles } from '@/lib/constants';
 import { prisma } from '@/lib/prisma';
 import { startOfMonth, subMonths } from 'date-fns';
 import { getTranslations } from 'next-intl/server';
 
-export default async function Page() {
+export default async function Page({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
+}) {
   const t = await getTranslations('pages.dashboard');
   const session = await auth();
 
@@ -13,13 +19,18 @@ export default async function Page() {
     return <>{t('loginHint')}</>;
   }
 
+  const allowShowAll = session.user.role !== Roles.User;
+  const isShowAll = session.user.role !== Roles.User && 'show-all' in (await searchParams);
+
+  const userIdFilter = isShowAll ? {} : { userId: +session.user.id };
+
   const logsTotal = await prisma.beerLog.findMany({
-    where: { userId: +session.user!.id! },
+    where: { ...userIdFilter },
     orderBy: { date: 'desc' },
   });
   const quantityTotal = (
     await prisma.beerLog.aggregate({
-      where: { userId: +session.user!.id! },
+      where: { ...userIdFilter },
       orderBy: { date: 'desc' },
       _sum: { quantity: true },
     })
@@ -27,7 +38,7 @@ export default async function Page() {
   const quantityPrevMonth = (
     await prisma.beerLog.aggregate({
       where: {
-        userId: +session.user!.id!,
+        ...userIdFilter,
         date: { gte: subMonths(startOfMonth(new Date()), 1), lt: startOfMonth(new Date()) },
       },
       _sum: { quantity: true },
@@ -35,7 +46,7 @@ export default async function Page() {
   )._sum.quantity!;
   const quantityThisMonth = (
     await prisma.beerLog.aggregate({
-      where: { userId: +session.user!.id!, date: { gte: startOfMonth(new Date()) } },
+      where: { ...userIdFilter, date: { gte: startOfMonth(new Date()) } },
       _sum: { quantity: true },
     })
   )._sum.quantity!;
@@ -44,6 +55,8 @@ export default async function Page() {
   if (trendThisMonth === Infinity) {
     trendThisMonth = 100;
   }
+
+  const users = isShowAll ? await prisma.user.findMany() : undefined;
 
   return (
     <div>
@@ -56,7 +69,9 @@ export default async function Page() {
         />
       </div>
 
-      <DashboardTable logs={logsTotal.slice(0, 10)} />
+      {allowShowAll && <DashboardToggle showAll={isShowAll} />}
+
+      <DashboardTable users={users} logs={logsTotal.slice(0, isShowAll ? 50 : 10)} />
     </div>
   );
 }
