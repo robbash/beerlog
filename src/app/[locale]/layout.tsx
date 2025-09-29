@@ -38,7 +38,7 @@ export default async function Layout({
       <body>
         <NextIntlClientProvider>
           <header className="border-b bg-gray-100">
-            <div className="container m-auto flex h-14 items-center justify-between">
+            <div className="container m-auto flex h-14 items-center justify-between px-3">
               <Link href={`/${locale}`} className="font-semibold">
                 {Globals.title}
               </Link>
@@ -76,7 +76,7 @@ export default async function Layout({
               </nav>
             </div>
           </header>
-          <main className="container m-auto py-6">{children}</main>
+          <main className="container m-auto px-3 py-6">{children}</main>
         </NextIntlClientProvider>
       </body>
     </html>
