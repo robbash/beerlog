@@ -25,7 +25,7 @@
       "form": {
         "firstName": "Vorname",
         "lastName": "Nachname",
-        "email": "E-Nail",
+        "email": "E-Mail",
         "emailPlaceholder": "me@example.com",
         "password": "Passwort",
         "passwordConfirmation": "Passwort bestätigen"
@@ -92,7 +92,7 @@
       "caption": "Liste aller Benutzer",
       "headers": {
         "name": "Name",
-        "email": "E-Nail",
+        "email": "E-Mail",
         "approved": "Bestätigt",
         "mfaEnabled": "MFA aktiviert",
         "actions": ""
