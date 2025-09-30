@@ -49,6 +49,9 @@
         "userId": "Benuzter",
         "userIdPlaceholder": "Wähle einen Benutzer aus"
       },
+      "error": {
+        "title": "Fehler"
+      },
       "button": {
         "submit": "Absenden",
         "cancel": "Abbrechen"

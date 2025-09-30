@@ -53,9 +53,9 @@ export function BeerLogForm(props: Props) {
     setError(null);
 
     try {
-      const formData = new FormData(event.currentTarget);
+      const formData = Object.fromEntries(new FormData(event.currentTarget).entries());
       const values = {
-        ...Object.fromEntries(formData.entries()),
+        ...formData,
         date: formDate,
       };
 
@@ -156,7 +156,12 @@ export function BeerLogForm(props: Props) {
               {t('button.submit')}
             </Button>
 
-            <Button type="submit" className="w-full" variant="secondary">
+            <Button
+              type="button"
+              className="w-full"
+              variant="secondary"
+              onClick={() => router.push('/')}
+            >
               {t('button.cancel')}
             </Button>
           </div>
