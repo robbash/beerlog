@@ -6,16 +6,41 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { useFormState } from 'react-dom';
-import { AlertCircleIcon } from 'lucide-react';
+import { FormEvent, useState } from 'react';
+import { AlertCircleIcon, LoaderCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '../ui/alert';
 import { loginAction } from '@/app/actions/user';
+import { useRouter } from 'next/navigation';
 
 export function LoginForm() {
-  const [state, formAction] = useFormState(loginAction, { error: undefined });
+  const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | undefined>();
 
   const t = useTranslations('pages.login');
   const tError = useTranslations('errors');
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    const formData = new FormData(event.currentTarget);
+
+    setLoading(true);
+
+    const result = await loginAction(formData);
+
+    if (result.error) {
+      setErrorMessage(result.error);
+
+      setLoading(false);
+
+      return;
+    }
+
+    router.push('/');
+    router.refresh();
+  }
 
   return (
     <Card>
@@ -24,13 +49,13 @@ export function LoginForm() {
         <CardDescription>{t('subtitle')}</CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={formAction}>
+        <form onSubmit={handleSubmit}>
           <div className="grid gap-6">
-            {state.error && (
+            {errorMessage && (
               <div className="grid gap-3">
                 <Alert variant="destructive">
                   <AlertCircleIcon />
-                  <AlertDescription>{tError(state.error)}</AlertDescription>
+                  <AlertDescription>{tError(errorMessage)}</AlertDescription>
                 </Alert>
               </div>
             )}
@@ -50,6 +75,11 @@ export function LoginForm() {
               <Input name="password" type="password" required />
             </div>
             <Button type="submit" className="w-full">
+              {loading && (
+                <>
+                  <LoaderCircle className="animate-spin" />{' '}
+                </>
+              )}
               {t('button.signIn')}
             </Button>
             <div className="text-center text-sm">

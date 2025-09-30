@@ -3,24 +3,24 @@
 import { signIn } from '@/lib/auth';
 import { sendEmail } from '@/lib/email';
 import { prisma } from '@/lib/prisma';
+import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
 export type LoginFormState = {
   error: string | undefined;
 };
 
-export async function loginAction(_: LoginFormState, formData: FormData): Promise<LoginFormState> {
+export async function loginAction(formData: FormData): Promise<LoginFormState> {
   'use server';
 
   try {
     await signIn('credentials', formData);
-
-    return { error: undefined };
   } catch (error) {
-    // if (error instanceof AuthError) {
-    // return redirect(`${SIGNIN_ERROR_URL}?error=${error.type}`)
-    // }
-    return { error: 'invalidCredentials' };
+    if (!isRedirectError(error)) {
+      return { error: 'invalidCredentials' };
+    }
   }
+
+  return { error: undefined };
 }
 
 export async function userEmailExists(email: string) {

@@ -24,8 +24,6 @@ export async function registerAccount(
         "Hey there,\nYour account has been created and is waiting for approval. You will receive an email when you're ready to go...",
       );
 
-      console.warn(result);
-
       return !!result.response;
     }
   } catch (ex) {
