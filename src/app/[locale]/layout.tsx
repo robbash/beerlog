@@ -39,7 +39,8 @@ export default async function Layout({
         <NextIntlClientProvider>
           <header className="border-b bg-gray-100">
             <div className="container m-auto flex h-14 items-center justify-between px-3">
-              <Link href={`/${locale}`} className="font-semibold">
+              <Link href={`/${locale}`} className="flex gap-2 font-semibold">
+                <img src="/beerlog-icon.png" alt={Globals.title} className="size-6" />
                 {Globals.title}
               </Link>
               <nav>
