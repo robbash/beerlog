@@ -14,7 +14,13 @@ export async function registerAccount(
   try {
     const passwordHash = await bcrypt.hash(password, 10);
     const user = await prisma.user.create({
-      data: { firstName, lastName, email, passwordHash, role: Roles.User },
+      data: {
+        firstName,
+        lastName,
+        email: email.toLowerCase().trim(),
+        passwordHash,
+        role: Roles.User,
+      },
     });
 
     if (user) {
