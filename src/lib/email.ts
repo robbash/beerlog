@@ -13,7 +13,13 @@ const options: Options = {
 
 export const transporter = nodemailer.createTransport(options);
 
-export async function sendEmail(to: string, subject: string, text: string, from?: string) {
+export async function sendEmail(
+  to: string,
+  subject: string,
+  text: string,
+  from?: string,
+  bcc?: string | string[],
+) {
   from = from ?? process.env.SMTP_SENDER;
 
   return transporter.sendMail({
@@ -21,5 +27,6 @@ export async function sendEmail(to: string, subject: string, text: string, from?
     envelope: { to, from },
     subject,
     text,
+    bcc,
   });
 }

@@ -69,7 +69,7 @@ export function RegisterForm() {
       return;
     }
 
-    setErrorMessage(t('registrationFailed'));
+    setErrorMessage(tError('registrationFailed'));
     setLoading(false);
   }
 
