@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { format } from 'date-fns';
+import { format, subMonths } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
@@ -37,6 +37,7 @@ export default function DatePicker(props: Props) {
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
+          disabled={(date) => date > new Date() || date < subMonths(new Date(), 1)}
           mode="single"
           selected={date}
           onSelect={(d) => {
