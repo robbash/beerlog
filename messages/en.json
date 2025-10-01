@@ -91,6 +91,9 @@
         "actions": ""
       }
     },
+    "datePicker": {
+      "pickADate": "Pick a date"
+    },
     "usersTable": {
       "caption": "A list of all registered users.",
       "headers": {
