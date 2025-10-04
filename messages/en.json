@@ -124,7 +124,8 @@
     "login": "Login",
     "logout": "Logout",
     "register": "Register",
-    "users": "Users"
+    "users": "Users",
+    "greetings": "Hey {name}"
   },
   "formFooter": {
     "hint": "Cheers"

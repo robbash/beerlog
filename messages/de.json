@@ -124,7 +124,8 @@
     "login": "Anmelden",
     "logout": "Abmelden",
     "register": "Registrieren",
-    "users": "Benutzer"
+    "users": "Benutzer",
+    "greetings": "Hey {name}"
   },
   "formFooter": {
     "hint": "Zum Wohl"

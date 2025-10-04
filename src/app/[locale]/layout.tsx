@@ -53,6 +53,12 @@ export default async function Layout({
               <nav>
                 {session?.user ? (
                   <div className="flex gap-2">
+                    {session?.user.firstName && (
+                      <div className="p-2 text-sm text-gray-400 italic">
+                        {t('navigation.greetings', { name: session.user.firstName })}
+                      </div>
+                    )}
+
                     {session?.user.role === Roles.Admin && (
                       <Link href={`/${locale}/users`}>
                         <Button variant="ghost">{t('navigation.users')}</Button>
