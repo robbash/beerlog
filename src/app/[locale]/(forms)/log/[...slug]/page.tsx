@@ -5,6 +5,7 @@ import { prisma } from '@/lib/prisma';
 import { User } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { format } from 'date-fns';
+import { getLocale } from 'next-intl/server';
 
 interface Props {
   params: Promise<{ slug?: string[] }>;
@@ -12,13 +13,16 @@ interface Props {
 
 export default async function Page({ params }: Props) {
   const { slug = [] } = await params;
+  const selector = slug[0] ?? logFormToday;
+
+  const locale = await getLocale();
 
   const session = await auth();
   if (!session) {
-    return redirect('/');
+    return redirect(
+      `/${locale}/login?redirect-uri=${encodeURIComponent(`/${locale}/log/${selector}`)}`,
+    );
   }
-
-  const selector = slug[0] ?? logFormToday;
 
   let id = 0;
   let date: string | undefined;

@@ -10,10 +10,11 @@ import { FormEvent, useState } from 'react';
 import { AlertCircleIcon, LoaderCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '../ui/alert';
 import { loginAction } from '@/app/actions/user';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export function LoginForm() {
   const router = useRouter();
+  const params = useSearchParams();
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
@@ -38,7 +39,9 @@ export function LoginForm() {
       return;
     }
 
-    router.push('/');
+    const uri = params.get('redirect-uri');
+
+    router.push(uri ?? '/');
     router.refresh();
   }
 
