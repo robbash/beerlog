@@ -139,7 +139,7 @@
       "number": "Password must contain at least one number",
       "match": "Password must match"
     },
-    "invalidCredentials": "The login details are invalid",
+    "invalidCredentials": "The login details are invalid, or access not yet approved.",
     "userExists": "The email cannot be taken",
     "registrationFailed": "Registration failed. Please contact the support."
   }
