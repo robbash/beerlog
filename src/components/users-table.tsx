@@ -19,6 +19,8 @@ import {
   UserRound,
   UserRoundCheck,
   UserRoundX,
+  ShieldUser,
+  UserRoundPlus,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -88,6 +90,7 @@ export function UsersTable(props: Props) {
           <TableRow>
             <TableHead className="w-[100px]">{t('headers.name')}</TableHead>
             <TableHead>{t('headers.email')}</TableHead>
+            <TableHead className="text-center">{t('headers.role')}</TableHead>
             <TableHead className="text-center">{t('headers.approved')}</TableHead>
             <TableHead className="text-center">{t('headers.mfaEnabled')}</TableHead>
             <TableHead className="text-right">{t('headers.actions')}</TableHead>
@@ -101,6 +104,10 @@ export function UsersTable(props: Props) {
                   {user.firstName} {user.lastName}
                 </TableCell>
                 <TableCell>{user.email}</TableCell>
+                <TableCell>
+                  {user.role === Roles.Admin && <ShieldUser className={iconClassNames} />}
+                  {user.role === Roles.Manager && <UserRoundPlus className={iconClassNames} />}
+                </TableCell>
                 <TableCell>
                   {user.approved ? (
                     <UserRoundCheck className={iconClassNames} />

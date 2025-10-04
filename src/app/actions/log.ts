@@ -16,7 +16,7 @@ export type Result = {
 
 export type BeerLogFormData = {
   id?: number;
-  date?: Date;
+  date?: string;
   quantity?: number;
   userId?: number;
 };
@@ -47,7 +47,7 @@ export async function saveLog(formData: BeerLogFormData): Promise<Result> {
   const userId = user.role === Roles.User ? +user.id : parsed.data.userId;
 
   const data: Partial<BeerLog> = {
-    date: new Date(parsed.data.date),
+    date: parsed.data.date,
     quantity: parsed.data.quantity,
     updatedAt: new Date(),
     updatedById: +user.id,

@@ -6,8 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { AlertCircleIcon, LoaderCircle, Minus, Plus } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useTranslations } from 'next-intl';
-import { useRouter } from 'next/navigation';
+import { useLocale, useTranslations } from 'next-intl';
+import { usePathname, useRouter } from 'next/navigation';
 import { saveLog } from '@/app/actions/log';
 import { User } from '@prisma/client';
 import {
@@ -19,25 +19,30 @@ import {
 } from '@/components/ui/select';
 import DatePicker from '../date-picker';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
+import { format } from 'date-fns';
+import { dateFormat } from '@/lib/constants';
 
 interface Props {
   id?: number;
-  date?: Date;
+  date?: string;
   quantity?: number;
   userId?: number;
   users?: User[];
+  lockDate?: boolean;
 }
 
 export function BeerLogForm(props: Props) {
-  const { id, date, quantity = 1, userId, users } = props;
+  const { id, date, quantity = 1, userId, users, lockDate = false } = props;
   const isNew = id === undefined;
 
   const t = useTranslations('pages.beerLog');
+  const locale = useLocale();
   const router = useRouter();
+  const pathname = usePathname();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formDate, setFormDate] = useState<Date | undefined>(date ? new Date(date) : new Date());
   const [error, setError] = useState<string | null>(null);
-  const [formDate, setFormDate] = useState<Date | undefined>(date);
   const [formQuantity, setFormQuantity] = useState<number>(quantity);
 
   function increaseQuantity(add: number = 1) {
@@ -54,10 +59,7 @@ export function BeerLogForm(props: Props) {
 
     try {
       const formData = Object.fromEntries(new FormData(event.currentTarget).entries());
-      const values = {
-        ...formData,
-        date: formDate,
-      };
+      const values = { ...formData, date: format(formDate!, dateFormat) };
 
       const result = await saveLog(values);
 
@@ -72,6 +74,18 @@ export function BeerLogForm(props: Props) {
       console.error(error);
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  function handleFormDate(d: Date) {
+    if (users) {
+      setFormDate(d);
+    } else {
+      const dateStr = format(d, 'yyyy-MM-dd');
+
+      if (!lockDate && !pathname.endsWith(dateStr)) {
+        router.replace(`/${locale}/log/${dateStr}`);
+      }
     }
   }
 
@@ -100,7 +114,11 @@ export function BeerLogForm(props: Props) {
           <div className="grid gap-6">
             <div className="grid gap-3">
               <Label htmlFor="date">{t('form.date')}</Label>
-              <DatePicker defaultValue={date || new Date()} onSelect={setFormDate} />
+              <DatePicker
+                disabled={lockDate}
+                defaultValue={formDate ? new Date(formDate) : undefined}
+                onSelect={handleFormDate}
+              />
             </div>
 
             <div className="grid gap-3">

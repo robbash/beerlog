@@ -14,3 +14,10 @@ export const Roles = {
 export const Constants = {
   CURRENCY: 'EUR',
 };
+
+export const dateRegex = /^\d{4}(-\d{2}){2}$/;
+export const dateFormat = 'yyyy-MM-dd';
+export const humanDateFormat = 'dd.MM.yyyy';
+
+export const logFormToday = 'today';
+export const logFormNewForUser = 'new-for-user';

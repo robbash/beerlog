@@ -99,6 +99,7 @@
       "headers": {
         "name": "Name",
         "email": "E-Mail",
+        "role": "Rolle",
         "approved": "Bestätigt",
         "mfaEnabled": "MFA aktiviert",
         "actions": ""

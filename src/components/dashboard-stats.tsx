@@ -70,7 +70,7 @@ export async function DashboardStats(props: Props) {
       <Card className="@container/card py-3">
         <CardHeader>
           <CardTitle className="flex justify-center">
-            <Link href={`/${locale}/log`}>
+            <Link href={`/${locale}/log/today`}>
               <IconPlus className="size-8 md:size-12 lg:size-16" />
             </Link>
           </CardTitle>

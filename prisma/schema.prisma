@@ -36,7 +36,7 @@ model BeerLog {
   id Int @id @default(autoincrement())
   userId Int
   quantity Int
-  date DateTime
+  date String
   costCentsAtTime Int
   isPaidFor Boolean @default(false)
   createdAt DateTime @default(now())

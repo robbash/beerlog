@@ -12,10 +12,11 @@ import { useTranslations } from 'next-intl';
 interface Props {
   defaultValue?: Date;
   onSelect?: (date: Date) => void;
+  disabled?: boolean;
 }
 
 export default function DatePicker(props: Props) {
-  const { defaultValue, onSelect } = props;
+  const { defaultValue, disabled = false, onSelect } = props;
 
   const [date, setDate] = React.useState<Date | undefined>(defaultValue);
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
@@ -30,6 +31,7 @@ export default function DatePicker(props: Props) {
     <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
       <PopoverTrigger asChild>
         <Button
+          disabled={disabled}
           variant="outline"
           data-empty={!date}
           className="data-[empty=true]:text-muted-foreground w-full justify-start text-left font-normal"

@@ -12,7 +12,8 @@ import { IconCurrencyEuro, IconCurrencyEuroOff, IconEdit } from '@tabler/icons-r
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Button } from './ui/button';
 import Link from 'next/link';
-import { formatDateTime } from '@/lib/utils/date';
+import { format } from 'date-fns';
+import { humanDateFormat } from '@/lib/constants';
 
 interface Props {
   logs: BeerLog[];
@@ -41,10 +42,13 @@ export async function DashboardTable(props: Props) {
       <TableBody>
         {logs.map((log) => {
           const user = users?.find((user) => user.id === log.userId);
+          const editLink = `/${locale}/log/${users ? log.id : log.date}`;
 
           return (
             <TableRow key={log.id}>
-              <TableCell className="font-medium">{formatDateTime(log.date)}</TableCell>
+              <TableCell className="font-medium">
+                {format(new Date(log.date), humanDateFormat)}
+              </TableCell>
               <TableCell>{log.quantity}</TableCell>
               {users && (
                 <TableCell>
@@ -65,7 +69,7 @@ export async function DashboardTable(props: Props) {
                   </Button>
                 ) : (
                   <Button variant="outline" asChild>
-                    <Link href={`/${locale}/log/${log.id}`}>
+                    <Link href={editLink}>
                       <IconEdit />
                     </Link>
                   </Button>
