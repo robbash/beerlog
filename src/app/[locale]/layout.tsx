@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Metadata, Viewport } from 'next';
 import { Globals, Roles } from '@/lib/constants';
 import { getTranslations } from 'next-intl/server';
+import Image from 'next/image';
 
 export const metadata: Metadata = {
   title: Globals.title,
@@ -40,7 +41,13 @@ export default async function Layout({
           <header className="border-b bg-gray-100">
             <div className="container m-auto flex h-14 items-center justify-between px-3">
               <Link href={`/${locale}`} className="flex gap-2 font-semibold">
-                <img src="/beerlog-icon.png" alt={Globals.title} className="size-6" />
+                <Image
+                  unoptimized
+                  src="/beerlog-icon.png"
+                  alt={Globals.title}
+                  height={24}
+                  width={24}
+                />
                 {Globals.title}
               </Link>
               <nav>

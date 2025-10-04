@@ -31,7 +31,9 @@ export default async function Page({ params }: Props) {
       where: { id },
     });
 
-    return <BeerLogForm {...beerlog} users={users} />;
+    return (
+      <BeerLogForm {...{ ...beerlog, userId: beerlog?.userId ?? +session.user.id }} users={users} />
+    );
   }
 
   return <BeerLogForm users={users} />;

@@ -29,7 +29,7 @@ interface Props {
 }
 
 export function BeerLogForm(props: Props) {
-  const { id, date, quantity = 1, userId = [], users } = props;
+  const { id, date, quantity = 1, userId, users } = props;
   const isNew = id === undefined;
 
   const t = useTranslations('pages.beerLog');
@@ -42,7 +42,7 @@ export function BeerLogForm(props: Props) {
 
   function increaseQuantity(add: number = 1) {
     const newValue = Math.max(1, formQuantity + add);
-    console.warn(newValue);
+
     setFormQuantity(newValue);
   }
 
