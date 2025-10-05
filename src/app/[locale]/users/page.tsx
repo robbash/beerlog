@@ -11,7 +11,7 @@ export default async function Page() {
   }
 
   const users = await prisma.user.findMany({
-    orderBy: [{ firstName: 'desc' }, { lastName: 'desc' }],
+    orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
   });
 
   return <UsersTable users={users} />;
