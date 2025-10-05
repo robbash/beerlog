@@ -24,13 +24,15 @@ export const prisma: PrismaClient =
 
           let before: any;
           if (isAudited) {
-            if (operation.endsWith('Many')) {
-              throw new Error('Auditing of `...Many` operation currently not implemented.');
+            const isSingleOp = !operation.endsWith('Many');
+
+            if (operation !== 'create') {
+              const where = (args as any).where ?? {};
+
+              before = await (prisma as any)[lcFirst(model)][isSingleOp ? 'findFirst' : 'findMany'](
+                { where },
+              );
             }
-
-            const where = (args as any).where ?? {};
-
-            before = await (prisma as any)[lcFirst(model)].findFirst({ where });
           }
 
           const result = await query(args);
@@ -38,17 +40,28 @@ export const prisma: PrismaClient =
           if (isAudited) {
             const session = await auth();
 
-            const diff =
-              operation === 'delete' ? before : shallowDiff(before, result as Json, skippedProps);
+            let diff: any;
+            switch (operation) {
+              case 'create':
+              case 'createMany':
+                diff = result;
+                break;
+              case 'delete':
+              case 'deleteMany':
+                diff = before;
+                break;
+              default:
+                diff = shallowDiff(before, result as Json, skippedProps);
+            }
 
-            if (Object.keys(diff).length > 0) {
+            if ((Array.isArray(diff) && diff.length > 0) || Object.keys(diff).length > 0) {
               await prisma.auditLog.create({
                 data: {
-                  actorId: +(session?.user.id ?? -1),
+                  actorId: session?.user.id ? +session?.user.id : undefined,
                   action: operation,
                   entity: model,
                   entityId: (args as any).where?.id,
-                  diff,
+                  diff: diff as any,
                 },
               });
             }
