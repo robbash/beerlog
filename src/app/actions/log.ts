@@ -44,7 +44,7 @@ export async function saveLog(formData: BeerLogFormData): Promise<Result> {
   }
 
   const user = session.user!;
-  const userId = user.role === Roles.User ? +user.id : parsed.data.userId;
+  const userId = user.role === Roles.User || !parsed.data.userId ? +user.id : parsed.data.userId;
 
   const data: Partial<BeerLog> = {
     date: parsed.data.date,
