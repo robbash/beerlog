@@ -43,6 +43,7 @@ export function BeerLogForm(props: Props) {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formDate, setFormDate] = useState<Date | undefined>(date ? new Date(date) : new Date());
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
   const [formQuantity, setFormQuantity] = useState<number>(quantity);
 
   function increaseQuantity(add: number = 1) {
@@ -56,6 +57,7 @@ export function BeerLogForm(props: Props) {
 
     setIsLoading(true);
     setError(null);
+    setSuccess(null);
 
     try {
       const formData = Object.fromEntries(new FormData(event.currentTarget).entries());
@@ -67,7 +69,11 @@ export function BeerLogForm(props: Props) {
         throw new Error('Failed to submit the data. Please try again.');
       }
 
-      router.push('/');
+      setSuccess(t('success'));
+
+      setTimeout(() => {
+        router.push('/');
+      }, 1500);
     } catch (error) {
       setError((error as Error).message);
 
@@ -106,6 +112,12 @@ export function BeerLogForm(props: Props) {
               <AlertDescription>
                 <p>{error}</p>
               </AlertDescription>
+            </Alert>
+          )}
+
+          {success && (
+            <Alert className="mb-4 border-green-600 bg-green-50 text-green-800">
+              <AlertTitle>{success}</AlertTitle>
             </Alert>
           )}
 

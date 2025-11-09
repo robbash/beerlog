@@ -21,7 +21,9 @@ import {
   UserRoundX,
   ShieldUser,
   UserRoundPlus,
+  Coins,
 } from 'lucide-react';
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import {
   DropdownMenu,
@@ -46,8 +48,16 @@ import {
   AlertDialogAction,
 } from './ui/alert-dialog';
 
+interface UserWithBalance extends User {
+  balance: {
+    creditCents: number;
+    owedCents: number;
+    netBalanceCents: number;
+  };
+}
+
 interface Props {
-  users: User[];
+  users: UserWithBalance[];
 }
 
 export function UsersTable(props: Props) {
@@ -56,6 +66,13 @@ export function UsersTable(props: Props) {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const t = useTranslations('components.usersTable');
+
+  const formatCurrency = (cents: number) => {
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'EUR',
+    }).format(cents / 100);
+  };
 
   const handleUserApproval = (id: number, approved: boolean) => {
     setUserApproved(id, approved).then((res) => {
@@ -90,6 +107,7 @@ export function UsersTable(props: Props) {
           <TableRow>
             <TableHead className="w-[100px]">{t('headers.name')}</TableHead>
             <TableHead>{t('headers.email')}</TableHead>
+            <TableHead className="text-right">{t('headers.balance')}</TableHead>
             <TableHead className="text-center">{t('headers.role')}</TableHead>
             <TableHead className="text-center">{t('headers.approved')}</TableHead>
             <TableHead className="text-center">{t('headers.mfaEnabled')}</TableHead>
@@ -104,6 +122,15 @@ export function UsersTable(props: Props) {
                   {user.firstName} {user.lastName}
                 </TableCell>
                 <TableCell>{user.email}</TableCell>
+                <TableCell className="text-right font-medium">
+                  <span
+                    className={cn(
+                      user.balance.netBalanceCents < 0 ? 'text-red-600' : 'text-green-600',
+                    )}
+                  >
+                    {formatCurrency(user.balance.netBalanceCents)}
+                  </span>
+                </TableCell>
                 <TableCell>
                   {user.role === Roles.Admin && <ShieldUser className={iconClassNames} />}
                   {user.role === Roles.Manager && <UserRoundPlus className={iconClassNames} />}
@@ -131,6 +158,12 @@ export function UsersTable(props: Props) {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="w-56" align="end">
                       <DropdownMenuGroup>
+                        <DropdownMenuItem asChild>
+                          <Link href={`/payment?userId=${user.id}`}>
+                            <Coins /> {t('actions.recordPayment')}
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
                         {user.approved ? (
                           <DropdownMenuItem
                             variant="destructive"

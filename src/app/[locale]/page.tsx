@@ -30,6 +30,9 @@ export default async function Page({
 
   const logsTotal = await prisma.beerLog.findMany({
     where: { ...userIdFilter },
+    include: {
+      paymentAllocations: true,
+    },
     orderBy: { date: 'desc' },
   });
   const quantityTotal = (

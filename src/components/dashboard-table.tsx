@@ -7,16 +7,21 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { BeerLog, User } from '@prisma/client';
+import { BeerLog, User, PaymentAllocation } from '@prisma/client';
 import { IconCurrencyEuro, IconCurrencyEuroOff, IconEdit } from '@tabler/icons-react';
 import { getLocale, getTranslations } from 'next-intl/server';
 import { Button } from './ui/button';
 import Link from 'next/link';
 import { format } from 'date-fns';
 import { humanDateFormat } from '@/lib/constants';
+import { getLogPaymentStatus } from '@/lib/payments';
+
+interface BeerLogWithAllocations extends BeerLog {
+  paymentAllocations: PaymentAllocation[];
+}
 
 interface Props {
-  logs: BeerLog[];
+  logs: BeerLogWithAllocations[];
   users?: User[];
 }
 
@@ -43,6 +48,7 @@ export async function DashboardTable(props: Props) {
         {logs.map((log) => {
           const user = users?.find((user) => user.id === log.userId);
           const editLink = `/${locale}/log/${users ? log.id : log.date}`;
+          const paymentStatus = getLogPaymentStatus(log);
 
           return (
             <TableRow key={log.id}>
@@ -56,10 +62,17 @@ export async function DashboardTable(props: Props) {
                 </TableCell>
               )}
               <TableCell>
-                {log.isPaidFor ? (
-                  <IconCurrencyEuro />
-                ) : (
-                  <IconCurrencyEuroOff className="text-gray-300" />
+                {paymentStatus === 'paid' && (
+                  <IconCurrencyEuro className="text-green-600" title="Fully paid" />
+                )}
+                {paymentStatus === 'partial' && (
+                  <IconCurrencyEuro
+                    className="text-orange-500"
+                    title={`Partially paid: ${log.paymentAllocations?.reduce((sum: number, a) => sum + a.amountCents, 0) || 0}/${log.costCentsAtTime} cents`}
+                  />
+                )}
+                {paymentStatus === 'unpaid' && (
+                  <IconCurrencyEuroOff className="text-gray-300" title="Unpaid" />
                 )}
               </TableCell>
               <TableCell className="text-right">

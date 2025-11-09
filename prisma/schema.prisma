@@ -30,6 +30,7 @@ model User {
   auditLogs AuditLog[] @relation("AuditActor")
   creates BeerLog[] @relation("CreatedBy")
   updates BeerLog[] @relation("UpdatedBy")
+  paymentsRecorded Payment[] @relation("RecordedBy")
 }
 
 model BeerLog {
@@ -46,17 +47,7 @@ model BeerLog {
   createdById Int?
   updatedBy User? @relation("UpdatedBy", fields:[updatedById], references:[id])
   updatedById Int?
-}
-
-model Payment {
-  id Int @id @default(autoincrement())
-  userId Int
-  amountCents Int
-  currency String @default("EUR")
-  paypalOrderId String?
-  status String @default("CREATED")
-  createdAt DateTime @default(now())
-  user User @relation(fields:[userId],references:[id])
+  paymentAllocations PaymentAllocation[]
 }
 
 model AuditLog {
@@ -81,4 +72,30 @@ model SystemLog {
 model Setting {
   key String @id
   value String
+}
+
+model Payment {
+  id Int @id @default(autoincrement())
+  userId Int
+  amountCents Int
+  currency String @default("EUR")
+  note String?
+  recordedById Int
+  createdAt DateTime @default(now())
+  user User @relation(fields:[userId],references:[id])
+  recordedBy User @relation("RecordedBy", fields:[recordedById], references:[id])
+  allocations PaymentAllocation[]
+}
+
+model PaymentAllocation {
+  id Int @id @default(autoincrement())
+  paymentId Int
+  beerLogId Int
+  amountCents Int
+  createdAt DateTime @default(now())
+  payment Payment @relation(fields:[paymentId],references:[id])
+  beerLog BeerLog @relation(fields:[beerLogId],references:[id])
+
+  @@index([paymentId])
+  @@index([beerLogId])
 }

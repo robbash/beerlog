@@ -52,8 +52,28 @@
       "error": {
         "title": "Fehler"
       },
+      "success": "Eintrag erfolgreich erfasst!",
       "button": {
         "submit": "Absenden",
+        "cancel": "Abbrechen"
+      }
+    },
+    "payment": {
+      "title": "Zahlung erfassen",
+      "description": "Erfasse eine manuelle Zahlung, die außerhalb der App empfangen wurde.",
+      "form": {
+        "user": "Benutzer",
+        "userPlaceholder": "Wähle einen Benutzer aus",
+        "amount": "Betrag (EUR)",
+        "note": "Notiz (optional)",
+        "notePlaceholder": "z.B. Barzahlung"
+      },
+      "error": {
+        "title": "Fehler"
+      },
+      "success": "Zahlung erfolgreich erfasst!",
+      "button": {
+        "submit": "Zahlung erfassen",
         "cancel": "Abbrechen"
       }
     }
@@ -99,12 +119,14 @@
       "headers": {
         "name": "Name",
         "email": "E-Mail",
+        "balance": "Saldo",
         "role": "Rolle",
         "approved": "Bestätigt",
         "mfaEnabled": "MFA aktiviert",
         "actions": ""
       },
       "actions": {
+        "recordPayment": "Zahlung erfassen",
         "approve": "Bestätigen",
         "unapprove": "Bestätigung entfernen",
         "edit": "Bearbeiten",

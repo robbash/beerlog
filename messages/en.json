@@ -52,8 +52,28 @@
       "error": {
         "title": "Error"
       },
+      "success": "Log recorded successfully!",
       "button": {
         "submit": "Submit",
+        "cancel": "Cancel"
+      }
+    },
+    "payment": {
+      "title": "Record Payment",
+      "description": "Record a manual payment received outside the app.",
+      "form": {
+        "user": "User",
+        "userPlaceholder": "Select a user",
+        "amount": "Amount (EUR)",
+        "note": "Note (optional)",
+        "notePlaceholder": "e.g., Cash payment"
+      },
+      "error": {
+        "title": "Error"
+      },
+      "success": "Payment recorded successfully!",
+      "button": {
+        "submit": "Record Payment",
         "cancel": "Cancel"
       }
     }
@@ -99,12 +119,14 @@
       "headers": {
         "name": "Name",
         "email": "Email",
+        "balance": "Balance",
         "role": "Role",
         "approved": "Approved",
         "mfaEnabled": "MFA Enabled",
         "actions": ""
       },
       "actions": {
+        "recordPayment": "Record Payment",
         "approve": "Approve",
         "unapprove": "Unapprove",
         "edit": "Edit",
