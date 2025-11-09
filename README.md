@@ -11,6 +11,14 @@ good, it forgot other stuff. Code was incomplete and some lib version didn't
 really go well with others. In the end I pulled it all apart and redid the whole
 lot. Anyway, Chatty nudged me towards Prisma which I had not used before.
 
+**EDIT**:
+
+I started using [OpenCode.ai](https://opencode.ai) - that's next level, check it
+out. I added a few features using it together with an Anthropic Pro 
+subscription.
+
+To contain the AI, I run it in Docker. Check [OpenCode in Docker](https://github.com/robbash/opencode-docker)..
+
 ## Stack
 
 - [Next.js](https://nextjs.org/)
