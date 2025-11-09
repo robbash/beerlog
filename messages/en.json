@@ -4,7 +4,8 @@
   },
   "pages": {
     "dashboard": {
-      "loginHint": "Please log in to get started."
+      "loginHint": "Please log in to get started.",
+      "logForOthers": "Log drinks for other users"
     },
     "login": {
       "title": "Login",
@@ -108,6 +109,15 @@
     "dashboardToggle": {
       "showOwn": "Only display own consuption.",
       "showAll": "Display consumption for all users"
+    },
+    "dashboardUserFilter": {
+      "label": "Filter by user",
+      "placeholder": "Select a user",
+      "allUsers": "All users"
+    },
+    "dashboardLoadMore": {
+      "loadMore": "Load More",
+      "loading": "Loading..."
     },
     "dashboardTable": {
       "caption": "A list of your recent beverage logs.",

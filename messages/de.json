@@ -4,7 +4,8 @@
   },
   "pages": {
     "dashboard": {
-      "loginHint": "Bitte melde dich an um loszulegen."
+      "loginHint": "Bitte melde dich an um loszulegen.",
+      "logForOthers": "Log drinks for other users"
     },
     "login": {
       "title": "Login",
@@ -108,6 +109,15 @@
     "dashboardToggle": {
       "showOwn": "Nur eigene anzeigen",
       "showAll": "Für alle anzeigen"
+    },
+    "dashboardUserFilter": {
+      "label": "Nach Benutzer filtern",
+      "placeholder": "Wähle einen Benutzer",
+      "allUsers": "Alle Benutzer"
+    },
+    "dashboardLoadMore": {
+      "loadMore": "Mehr laden",
+      "loading": "Lädt..."
     },
     "dashboardTable": {
       "caption": "Liste deiner letzten Getränkebuchungen",
