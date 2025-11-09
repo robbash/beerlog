@@ -89,8 +89,16 @@
         },
         "thisMonth": {
           "title": "Dieser Monat",
-          "trendUp": "Anstiegt um {percent}%",
-          "trendDown": "Abnahme {percent}%"
+          "prevMonth": "Letzter Monat",
+          "drinks": "Getränke",
+          "trendUp": "vs letzter Monat",
+          "trendDown": "vs letzter Monat"
+        },
+        "balance": {
+          "title": "Dein Saldo"
+        },
+        "addDrink": {
+          "title": "Getränk eintragen"
         },
         "logRecord": {
           "title": "Verbuche weitere Getränke"

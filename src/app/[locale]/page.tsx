@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { auth } from '@/lib/auth';
 import { dateFormat, logFormNewForUser, Roles } from '@/lib/constants';
 import { prisma } from '@/lib/prisma';
+import { getUserBalanceDetails } from '@/lib/payments';
 import { format, startOfMonth, subMonths } from 'date-fns';
 import { Plus } from 'lucide-react';
 import { getLocale, getTranslations } from 'next-intl/server';
@@ -53,7 +54,7 @@ export default async function Page({
       },
       _sum: { quantity: true },
     })
-  )._sum.quantity!;
+  )._sum.quantity || 0;
   const quantityThisMonth = (
     await prisma.beerLog.aggregate({
       where: { ...userIdFilter, date: { gte: format(startOfMonth(new Date()), dateFormat) } },
@@ -68,6 +69,9 @@ export default async function Page({
 
   const users = isShowAll ? await prisma.user.findMany() : undefined;
 
+  // Get user balance
+  const userBalance = await getUserBalanceDetails(+session.user.id);
+
   return (
     <div>
       <div className="-mx-4 flex flex-col gap-4 py-4 md:-mx-6 md:gap-6 md:py-6">
@@ -76,6 +80,7 @@ export default async function Page({
           beersPrevMonth={quantityPrevMonth}
           beersThisMonth={quantityThisMonth}
           trendThisMonth={trendThisMonth}
+          userBalance={userBalance}
         />
       </div>
 

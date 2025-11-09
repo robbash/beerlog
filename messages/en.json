@@ -89,8 +89,16 @@
         },
         "thisMonth": {
           "title": "This month",
-          "trendUp": "Up {percent}% this month",
-          "trendDown": "Down {percent}% this month"
+          "prevMonth": "Last month",
+          "drinks": "drinks",
+          "trendUp": "vs last month",
+          "trendDown": "vs last month"
+        },
+        "balance": {
+          "title": "Your Balance"
+        },
+        "addDrink": {
+          "title": "Log a Drink"
         },
         "logRecord": {
           "title": "Log beers consumed"
