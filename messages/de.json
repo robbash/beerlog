@@ -81,6 +81,10 @@
     "paymentHistory": {
       "title": "Zahlungshistorie",
       "description": "Alle erfassten Zahlungen und deren Zuweisungen anzeigen"
+    },
+    "users": {
+      "title": "Benutzer",
+      "description": "Benutzerkonten und Berechtigungen verwalten"
     }
   },
   "components": {

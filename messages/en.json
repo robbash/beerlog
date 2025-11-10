@@ -81,6 +81,10 @@
     "paymentHistory": {
       "title": "Payment History",
       "description": "View all recorded payments and their allocations"
+    },
+    "users": {
+      "title": "Users",
+      "description": "Manage user accounts and permissions"
     }
   },
   "components": {

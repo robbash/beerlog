@@ -3,13 +3,17 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { getUserBalanceDetails } from '@/lib/payments';
 import { redirect } from 'next/navigation';
+import { getTranslations } from 'next-intl/server';
+import { Roles } from '@/lib/constants';
 
 export default async function Page() {
   const session = await auth();
 
-  if (!session) {
+  if (!session || session.user?.role !== Roles.Admin) {
     return redirect('/');
   }
+
+  const t = await getTranslations('pages.users');
 
   const users = await prisma.user.findMany({
     orderBy: [{ firstName: 'asc' }, { lastName: 'asc' }],
@@ -23,5 +27,14 @@ export default async function Page() {
     })),
   );
 
-  return <UsersTable users={usersWithBalance} />;
+  return (
+    <div className="space-y-4">
+      <div>
+        <h1 className="text-2xl font-bold">{t('title')}</h1>
+        <p className="text-gray-600">{t('description')}</p>
+      </div>
+
+      <UsersTable users={usersWithBalance} />
+    </div>
+  );
 }
