@@ -8,6 +8,7 @@ import { Metadata, Viewport } from 'next';
 import { Globals, Roles } from '@/lib/constants';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
+import { Wallet, Users as UsersIcon } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: Globals.title,
@@ -52,25 +53,29 @@ export default async function Layout({
               </Link>
               <nav>
                 {session?.user ? (
-                  <div className="flex gap-2">
+                  <div className="flex items-center gap-2">
                     {session?.user.firstName && (
-                      <div className="p-2 text-sm text-gray-400 italic">
+                      <div className="p-2 text-sm text-gray-500 italic">
                         {t('navigation.greetings', { name: session.user.firstName })}
                       </div>
                     )}
 
                     {(session?.user.role === Roles.Admin ||
                       session?.user.role === Roles.Manager) && (
-                      <>
-                        <Link href={`/${locale}/payments`}>
-                          <Button variant="ghost">{t('navigation.payments')}</Button>
-                        </Link>
-                      </>
+                      <Link href={`/${locale}/payments`}>
+                        <Button variant="ghost" size="sm">
+                          <span className="hidden md:inline">{t('navigation.payments')}</span>
+                          <Wallet className="h-4 w-4 md:hidden" />
+                        </Button>
+                      </Link>
                     )}
 
                     {session?.user.role === Roles.Admin && (
                       <Link href={`/${locale}/users`}>
-                        <Button variant="ghost">{t('navigation.users')}</Button>
+                        <Button variant="ghost" size="sm">
+                          <span className="hidden md:inline">{t('navigation.users')}</span>
+                          <UsersIcon className="h-4 w-4 md:hidden" />
+                        </Button>
                       </Link>
                     )}
 
@@ -80,8 +85,8 @@ export default async function Layout({
                         await signOut();
                       }}
                     >
-                      <Button variant="outline" type="submit" className="">
-                        Logout
+                      <Button variant="outline" type="submit" size="sm">
+                        {t('navigation.logout')}
                       </Button>
                     </form>
                   </div>
