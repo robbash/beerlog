@@ -129,9 +129,6 @@
         "total": {
           "title": "Gesamt"
         },
-        "prevMonth": {
-          "title": "Vorheriger Monat"
-        },
         "thisMonth": {
           "title": "Dieser Monat",
           "prevMonth": "Letzter Monat",
@@ -144,9 +141,6 @@
         },
         "addDrink": {
           "title": "Getränk eintragen"
-        },
-        "logRecord": {
-          "title": "Verbuche weitere Getränke"
         }
       }
     },

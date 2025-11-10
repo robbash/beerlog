@@ -78,7 +78,7 @@ export function ResetPasswordForm({ token }: Props) {
         router.push('/login');
       }, 1500);
     } else {
-      setError(result.error || t('errorMessage'));
+      setError(result.error || t('error.message'));
     }
 
     setIsLoading(false);
@@ -105,7 +105,7 @@ export function ResetPasswordForm({ token }: Props) {
             <AlertCircleIcon />
             <AlertTitle>{t('error.title')}</AlertTitle>
             <AlertDescription>
-              <p>{t('invalidToken')}</p>
+              <p>{tError('invalidToken')}</p>
             </AlertDescription>
           </Alert>
         </CardContent>

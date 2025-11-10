@@ -32,7 +32,7 @@ export function ForgotPasswordForm() {
 
       setEmail('');
     } else {
-      setError(result.error || t('errorMessage'));
+      setError(result.error || t('error.message'));
     }
 
     setIsLoading(false);

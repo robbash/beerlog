@@ -129,9 +129,6 @@
         "total": {
           "title": "Total"
         },
-        "prevMonth": {
-          "title": "Previous month"
-        },
         "thisMonth": {
           "title": "This month",
           "prevMonth": "Last month",
@@ -144,9 +141,6 @@
         },
         "addDrink": {
           "title": "Log a Drink"
-        },
-        "logRecord": {
-          "title": "Log beers consumed"
         }
       }
     },
