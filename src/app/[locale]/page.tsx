@@ -29,6 +29,7 @@ export default async function Page({
   const params = await searchParams;
   const allowShowAll = session.user.role !== Roles.User;
   const isShowAll = session.user.role !== Roles.User && 'show-all' in params;
+  const currentMonthStart = format(startOfMonth(new Date()), dateFormat);
 
   // Get filter parameters
   const filterUserId = params.userId ? +params.userId : null;
@@ -70,7 +71,7 @@ export default async function Page({
           ...userIdFilter,
           date: {
             gte: format(subMonths(startOfMonth(new Date()), 1), dateFormat),
-            lt: format(startOfMonth(new Date()), dateFormat),
+            lt: currentMonthStart,
           },
         },
         _sum: { quantity: true },
@@ -98,6 +99,27 @@ export default async function Page({
   const balanceUserId = filterUserId || +session.user.id;
   const userBalance = await getUserBalanceDetails(balanceUserId);
 
+  // Get current month leaderboard
+  const leaderboard = await prisma.beerLog.groupBy({
+    by: ['userId'],
+    where: {
+      date: { gte: currentMonthStart },
+    },
+    _sum: {
+      quantity: true,
+    },
+    orderBy: {
+      _sum: {
+        quantity: 'desc',
+      },
+    },
+    take: 3,
+  });
+
+  // Find current user's rank in this month's leaderboard
+  const userRank = leaderboard.findIndex((entry) => entry.userId === balanceUserId);
+  const currentUserRank = userRank !== -1 ? userRank + 1 : null;
+
   return (
     <div>
       <div className="-mx-4 flex flex-col gap-4 py-4 md:-mx-6 md:gap-6 md:py-6">
@@ -107,6 +129,7 @@ export default async function Page({
           beersThisMonth={quantityThisMonth}
           trendThisMonth={trendThisMonth}
           userBalance={userBalance}
+          currentUserRank={currentUserRank}
         />
       </div>
 

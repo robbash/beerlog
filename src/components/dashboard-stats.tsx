@@ -17,10 +17,18 @@ interface Props {
     owedCents: number;
     netBalanceCents: number;
   };
+  currentUserRank: number | null;
 }
 
 export async function DashboardStats(props: Props) {
-  const { beersTotal, beersPrevMonth, beersThisMonth, trendThisMonth, userBalance } = props;
+  const {
+    beersTotal,
+    beersPrevMonth,
+    beersThisMonth,
+    trendThisMonth,
+    userBalance,
+    currentUserRank,
+  } = props;
   const pricePerBeer = await getBeerPriceCents();
 
   const locale = await getLocale();
@@ -30,6 +38,16 @@ export async function DashboardStats(props: Props) {
   const trend = trendThisMonth;
   const isTrendUp = trend > 0;
   const isTrendDown = trend < 0;
+
+  // Determine badge display
+  const getRankBadge = (rank: number | null) => {
+    if (rank === 1) return { emoji: '🥇', color: 'text-yellow-600 dark:text-yellow-400' };
+    if (rank === 2) return { emoji: '🥈', color: 'text-gray-500 dark:text-gray-400' };
+    if (rank === 3) return { emoji: '🥉', color: 'text-orange-700 dark:text-orange-500' };
+    return null;
+  };
+
+  const rankBadge = getRankBadge(currentUserRank);
 
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs md:grid-cols-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
@@ -48,9 +66,16 @@ export async function DashboardStats(props: Props) {
         </CardHeader>
       </Card>
 
-      <Card className="@container/card py-3">
+      <Card className="@container/card relative py-3">
         <CardHeader>
-          <CardDescription>{t('cards.thisMonth.title')}</CardDescription>
+          <CardDescription className="flex items-center justify-center gap-2">
+            {t('cards.thisMonth.title')}
+            {rankBadge && (
+              <span className={cn('text-2xl', rankBadge.color)} title={`Rank #${currentUserRank}`}>
+                {rankBadge.emoji}
+              </span>
+            )}
+          </CardDescription>
           <CardTitle className="flex justify-center text-xl font-semibold tabular-nums md:text-base lg:text-2xl">
             <div className="flex flex-col items-center gap-1">
               <div className="flex gap-2 align-middle">
