@@ -100,21 +100,23 @@ export default async function Page({
   const userBalance = await getUserBalanceDetails(balanceUserId);
 
   // Get current month leaderboard
-  const leaderboard = await prisma.beerLog.groupBy({
-    by: ['userId'],
-    where: {
-      date: { gte: currentMonthStart },
-    },
-    _sum: {
-      quantity: true,
-    },
-    orderBy: {
-      _sum: {
-        quantity: 'desc',
-      },
-    },
-    take: 3,
-  });
+  const leaderboard = isShowAll
+    ? []
+    : await prisma.beerLog.groupBy({
+        by: ['userId'],
+        where: {
+          date: { gte: currentMonthStart },
+        },
+        _sum: {
+          quantity: true,
+        },
+        orderBy: {
+          _sum: {
+            quantity: 'desc',
+          },
+        },
+        take: 3,
+      });
 
   // Find current user's rank in this month's leaderboard
   const userRank = leaderboard.findIndex((entry) => entry.userId === balanceUserId);
