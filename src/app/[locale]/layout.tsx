@@ -59,6 +59,15 @@ export default async function Layout({
                       </div>
                     )}
 
+                    {(session?.user.role === Roles.Admin ||
+                      session?.user.role === Roles.Manager) && (
+                      <>
+                        <Link href={`/${locale}/payments`}>
+                          <Button variant="ghost">{t('navigation.payments')}</Button>
+                        </Link>
+                      </>
+                    )}
+
                     {session?.user.role === Roles.Admin && (
                       <Link href={`/${locale}/users`}>
                         <Button variant="ghost">{t('navigation.users')}</Button>

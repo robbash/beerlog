@@ -77,6 +77,10 @@
         "submit": "Zahlung erfassen",
         "cancel": "Abbrechen"
       }
+    },
+    "paymentHistory": {
+      "title": "Zahlungshistorie",
+      "description": "Alle erfassten Zahlungen und deren Zuweisungen anzeigen"
     }
   },
   "components": {
@@ -132,6 +136,21 @@
     "datePicker": {
       "pickADate": "Wähle ein Datum"
     },
+    "paymentHistoryTable": {
+      "caption": "Zahlungshistorie mit allen erfassten Zahlungen",
+      "noPayments": "Noch keine Zahlungen erfasst",
+      "headers": {
+        "date": "Datum",
+        "user": "Benutzer",
+        "amount": "Betrag",
+        "note": "Notiz",
+        "recordedBy": "Erfasst von",
+        "allocated": "Zugewiesen",
+        "credit": "Guthaben"
+      },
+      "logs": "Einträge",
+      "noAllocations": "Nicht zugewiesen"
+    },
     "usersTable": {
       "caption": "Liste aller Benutzer",
       "headers": {
@@ -165,6 +184,7 @@
     "logout": "Abmelden",
     "register": "Registrieren",
     "users": "Benutzer",
+    "payments": "Zahlungen",
     "greetings": "Hey {name}"
   },
   "formFooter": {

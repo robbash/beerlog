@@ -77,6 +77,10 @@
         "submit": "Record Payment",
         "cancel": "Cancel"
       }
+    },
+    "paymentHistory": {
+      "title": "Payment History",
+      "description": "View all recorded payments and their allocations"
     }
   },
   "components": {
@@ -132,6 +136,21 @@
     "datePicker": {
       "pickADate": "Pick a date"
     },
+    "paymentHistoryTable": {
+      "caption": "Payment history showing all recorded payments",
+      "noPayments": "No payments recorded yet",
+      "headers": {
+        "date": "Date",
+        "user": "User",
+        "amount": "Amount",
+        "note": "Note",
+        "recordedBy": "Recorded By",
+        "allocated": "Allocated",
+        "credit": "Credit"
+      },
+      "logs": "logs",
+      "noAllocations": "Not allocated"
+    },
     "usersTable": {
       "caption": "A list of all registered users.",
       "headers": {
@@ -165,6 +184,7 @@
     "logout": "Logout",
     "register": "Register",
     "users": "Users",
+    "payments": "Payments",
     "greetings": "Hey {name}"
   },
   "formFooter": {
