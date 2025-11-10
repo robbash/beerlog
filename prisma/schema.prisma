@@ -4,7 +4,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url = env("DATABASE_URL")
+  url      = env("DATABASE_URL")
 }
 
 enum Role {
@@ -14,88 +14,102 @@ enum Role {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  firstName String
-  lastName String
-  email String @unique
-  passwordHash String
-  role Role @default(USER)
-  approved Boolean @default(false)
-  mfaEnabled Boolean @default(false)
-  mfaSecret String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  beerLogs BeerLog[]
-  payments Payment[]
-  auditLogs AuditLog[] @relation("AuditActor")
-  creates BeerLog[] @relation("CreatedBy")
-  updates BeerLog[] @relation("UpdatedBy")
-  paymentsRecorded Payment[] @relation("RecordedBy")
+  id                  Int                  @id @default(autoincrement())
+  firstName           String
+  lastName            String
+  email               String               @unique
+  passwordHash        String
+  role                Role                 @default(USER)
+  approved            Boolean              @default(false)
+  mfaEnabled          Boolean              @default(false)
+  mfaSecret           String?
+  createdAt           DateTime             @default(now())
+  updatedAt           DateTime             @updatedAt
+  beerLogs            BeerLog[]
+  payments            Payment[]
+  auditLogs           AuditLog[]           @relation("AuditActor")
+  creates             BeerLog[]            @relation("CreatedBy")
+  updates             BeerLog[]            @relation("UpdatedBy")
+  paymentsRecorded    Payment[]            @relation("RecordedBy")
+  passwordResetTokens PasswordResetToken[]
 }
 
 model BeerLog {
-  id Int @id @default(autoincrement())
-  userId Int
-  quantity Int
-  date String
-  costCentsAtTime Int
-  isPaidFor Boolean @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  user User @relation(fields:[userId],references:[id])
-  createdBy User? @relation("CreatedBy", fields:[createdById], references:[id])
-  createdById Int?
-  updatedBy User? @relation("UpdatedBy", fields:[updatedById], references:[id])
-  updatedById Int?
+  id                 Int                 @id @default(autoincrement())
+  userId             Int
+  quantity           Int
+  date               String
+  costCentsAtTime    Int
+  isPaidFor          Boolean             @default(false)
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+  user               User                @relation(fields: [userId], references: [id])
+  createdBy          User?               @relation("CreatedBy", fields: [createdById], references: [id])
+  createdById        Int?
+  updatedBy          User?               @relation("UpdatedBy", fields: [updatedById], references: [id])
+  updatedById        Int?
   paymentAllocations PaymentAllocation[]
 }
 
 model AuditLog {
-  id Int @id @default(autoincrement())
-  actorId Int?
-  action String
-  entity String
-  entityId Int?
-  diff Json?
+  id        Int      @id @default(autoincrement())
+  actorId   Int?
+  action    String
+  entity    String
+  entityId  Int?
+  diff      Json?
   createdAt DateTime @default(now())
-  actor User? @relation("AuditActor",fields:[actorId],references:[id])
+  actor     User?    @relation("AuditActor", fields: [actorId], references: [id])
 }
 
 model SystemLog {
-  id Int @id @default(autoincrement())
-  level String
-  message String
-  meta Json?
+  id        Int      @id @default(autoincrement())
+  level     String
+  message   String
+  meta      Json?
   createdAt DateTime @default(now())
 }
 
 model Setting {
-  key String @id
+  key   String @id
   value String
 }
 
 model Payment {
-  id Int @id @default(autoincrement())
-  userId Int
-  amountCents Int
-  currency String @default("EUR")
-  note String?
+  id           Int                 @id @default(autoincrement())
+  userId       Int
+  amountCents  Int
+  currency     String              @default("EUR")
+  note         String?
   recordedById Int
-  createdAt DateTime @default(now())
-  user User @relation(fields:[userId],references:[id])
-  recordedBy User @relation("RecordedBy", fields:[recordedById], references:[id])
-  allocations PaymentAllocation[]
+  createdAt    DateTime            @default(now())
+  user         User                @relation(fields: [userId], references: [id])
+  recordedBy   User                @relation("RecordedBy", fields: [recordedById], references: [id])
+  allocations  PaymentAllocation[]
 }
 
 model PaymentAllocation {
-  id Int @id @default(autoincrement())
-  paymentId Int
-  beerLogId Int
+  id          Int      @id @default(autoincrement())
+  paymentId   Int
+  beerLogId   Int
   amountCents Int
-  createdAt DateTime @default(now())
-  payment Payment @relation(fields:[paymentId],references:[id])
-  beerLog BeerLog @relation(fields:[beerLogId],references:[id])
+  createdAt   DateTime @default(now())
+  payment     Payment  @relation(fields: [paymentId], references: [id])
+  beerLog     BeerLog  @relation(fields: [beerLogId], references: [id])
 
   @@index([paymentId])
   @@index([beerLogId])
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  token     String   @unique
+  expiresAt DateTime
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([token])
+  @@index([userId])
 }

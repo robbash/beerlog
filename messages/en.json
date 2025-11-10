@@ -35,6 +35,42 @@
         "submit": "Register"
       }
     },
+    "forgotPassword": {
+      "title": "Forgot Password",
+      "description": "Enter your email address and we'll send you a link to reset your password.",
+      "form": {
+        "email": "Email",
+        "emailPlaceholder": "me@example.com"
+      },
+      "success": "If an account exists with that email, you will receive a password reset link shortly.",
+      "error": {
+        "title": "Error",
+        "message": "Failed to send password reset email. Please try again."
+      },
+      "button": {
+        "submit": "Send Reset Link",
+        "backToLogin": "Back to Login"
+      }
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "description": "Enter your new password below.",
+      "verifying": "Verifying reset token...",
+      "form": {
+        "password": "New Password",
+        "passwordPlaceholder": "Enter new password",
+        "passwordConfirmation": "Confirm password",
+        "passwordConfirmationPlaceholder": "Confirm new password"
+      },
+      "success": "Your password has been reset successfully. Redirecting to login...",
+      "error": {
+        "title": "Error",
+        "message": "Failed to reset password. Please try again."
+      },
+      "button": {
+        "submit": "Reset Password"
+      }
+    },
     "beerLog": {
       "title": {
         "add": "Track your drinks",
@@ -196,15 +232,16 @@
   },
   "errors": {
     "password": {
-      "minLength": "Password must have ${length} characters",
+      "minLength": "Password must have 6 characters",
       "specialCharacter": "Password must contain at least one special character",
       "lowerCase": "Password must contain at least one lowercase letter",
       "upperCase": "Password must contain at least one uppercase letter",
       "number": "Password must contain at least one number",
-      "match": "Password must match"
+      "mismatch": "Password must match"
     },
     "invalidCredentials": "The login details are invalid, or access not yet approved.",
     "userExists": "The email cannot be taken",
-    "registrationFailed": "Registration failed. Please contact the support."
+    "registrationFailed": "Registration failed. Please contact the support.",
+    "invalidToken": "Invalid or expired reset token."
   }
 }

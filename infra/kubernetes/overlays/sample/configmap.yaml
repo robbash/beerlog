@@ -4,3 +4,4 @@ metadata:
   name: dotenv
 data:
   APP_NAME: BeerLog Sample
+  APP_BASE_URL: https://beerlog.example.org

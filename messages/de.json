@@ -35,6 +35,42 @@
         "submit": "Registrieren"
       }
     },
+    "forgotPassword": {
+      "title": "Passwort vergessen",
+      "description": "Gib deine E-Mail-Adresse ein und wir senden dir einen Link zum Zurücksetzen deines Passworts.",
+      "form": {
+        "email": "E-Mail",
+        "emailPlaceholder": "me@example.com"
+      },
+      "success": "Wenn ein Konto mit dieser E-Mail-Adresse existiert, erhältst du in Kürze einen Link zum Zurücksetzen des Passworts.",
+      "error": {
+        "title": "Error",
+        "message": "Fehler beim Senden der E-Mail. Bitte versuche es erneut."
+      },
+      "button": {
+        "submit": "Link senden",
+        "backToLogin": "Zurück zum Login"
+      }
+    },
+    "resetPassword": {
+      "title": "Passwort zurücksetzen",
+      "description": "Gib dein neues Passwort ein.",
+      "verifying": "Token wird überprüft...",
+      "form": {
+        "password": "Neues Passwort",
+        "passwordPlaceholder": "Neues Passwort eingeben",
+        "passwordConfirmation": "Passwort bestätigen",
+        "passwordConfirmationPlaceholder": "Neues Passwort bestätigen"
+      },
+      "success": "Dein Passwort wurde erfolgreich zurückgesetzt. Du wirst zum Login weitergeleitet...",
+      "error": {
+        "title": "Error",
+        "message": "Fehler beim Zurücksetzen des Passworts. Bitte versuche es erneut."
+      },
+      "button": {
+        "submit": "Passwort zurücksetzen"
+      }
+    },
     "beerLog": {
       "title": {
         "add": "Gibt deine Getränke an",
@@ -201,10 +237,11 @@
       "lowerCase": "Das Passwort muss mindestens einen Kleinbuchstaben enthalten",
       "upperCase": "Das Passwort muss mindestens einen Großbuchstaben enthalten",
       "number": "Das Passwort muss mindestens eine Zahl enthalten",
-      "match": "Die Passwörter müssen übereinstimmen"
+      "mismatch": "Die Passwörter müssen übereinstimmen"
     },
     "invalidCredentials": "Die Anmeldedaten sind nicht gültig, oder noch nicht freigegeben.",
     "userExists": "Diese E-Mail kann nicht verwendet werden.",
-    "registrationFailed": "Registrierung fehlgeschlagen. Bitte den Support kontaktieren."
+    "registrationFailed": "Registrierung fehlgeschlagen. Bitte den Support kontaktieren.",
+    "invalidToken": "Ungültiger oder abgelaufener Reset-Token."
   }
 }

@@ -85,9 +85,10 @@ export function LoginForm() {
               )}
               {t('button.signIn')}
             </Button>
+
             <div className="text-center text-sm">
               <Link
-                href="/reset-password"
+                href="/forgot-password"
                 className="ml-auto text-sm underline-offset-4 hover:underline"
               >
                 {t('button.forgotPassword')}

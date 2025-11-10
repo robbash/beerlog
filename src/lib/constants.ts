@@ -15,6 +15,8 @@ export const Constants = {
   CURRENCY: 'EUR',
 };
 
+export const passwordMinLength = 6;
+
 export const dateRegex = /^\d{4}(-\d{2}){2}$/;
 export const dateFormat = 'yyyy-MM-dd';
 export const humanDateFormat = 'dd.MM.yyyy';
