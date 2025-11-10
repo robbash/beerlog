@@ -46,9 +46,12 @@ export async function saveLog(formData: BeerLogFormData): Promise<Result> {
   const user = session.user!;
   const userId = user.role === Roles.User || !parsed.data.userId ? +user.id : parsed.data.userId;
 
+  const beerPriceCents = await getBeerPriceCents();
+
   const data: Partial<BeerLog> = {
     date: parsed.data.date,
     quantity: parsed.data.quantity,
+    costCentsAtTime: parsed.data.quantity * beerPriceCents,
     updatedAt: new Date(),
     updatedById: +user.id,
   };
@@ -65,7 +68,6 @@ export async function saveLog(formData: BeerLogFormData): Promise<Result> {
         userId,
         createdAt: new Date(),
         createdById: +user.id,
-        costCentsAtTime: parsed.data.quantity * (await getBeerPriceCents()),
       } as BeerLog,
     });
   }
