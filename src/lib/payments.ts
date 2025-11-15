@@ -1,4 +1,4 @@
-import { prisma } from './prisma';
+import { prisma } from '@/lib/prisma';
 
 /**
  * Calculate the total amount owed by a user (unpaid beer logs)
@@ -82,19 +82,52 @@ export async function getUserBalanceDetails(userId: number) {
   };
 }
 
-interface AllocationResult {
+export interface AllocationResult {
   beerLogId: number;
   amountCents: number;
+  paymentId: number;
 }
 
 /**
- * Allocate a payment amount to unpaid beer logs
- * Returns the allocations made and remaining credit
+ * Apply existing credits to unpaid beer logs
+ * This should be called before creating a new payment to ensure
+ * existing credits are utilized first
  */
-export async function allocatePayment(
+export async function applyExistingCredits(
   userId: number,
-  paymentAmountCents: number,
-): Promise<{ allocations: AllocationResult[]; remainingCreditCents: number }> {
+): Promise<{ allocations: AllocationResult[]; creditUsed: number }> {
+  // Get all payments with unallocated amounts
+  const payments = await prisma.payment.findMany({
+    where: { userId, isFullyAllocated: false },
+    include: {
+      allocations: true,
+    },
+    orderBy: {
+      createdAt: 'asc', // Use oldest credits first
+    },
+  });
+
+  // Calculate available credit from each payment
+  const paymentsWithCredit = payments
+    .map((payment) => {
+      const allocatedAmount = payment.allocations.reduce(
+        (sum, allocation) => sum + allocation.amountCents,
+        0,
+      );
+
+      const remainingCredit = payment.amountCents - allocatedAmount;
+
+      return {
+        paymentId: payment.id,
+        remainingCredit,
+      };
+    })
+    .filter((p) => p.remainingCredit > 0);
+
+  if (paymentsWithCredit.length === 0) {
+    return { allocations: [], creditUsed: 0 };
+  }
+  // console.warn(paymentsWithCredit);
   // Get unpaid logs ordered by date (oldest first)
   const unpaidLogs = await prisma.beerLog.findMany({
     where: {
@@ -110,39 +143,47 @@ export async function allocatePayment(
   });
 
   const allocations: AllocationResult[] = [];
-  let remainingAmount = paymentAmountCents;
+  let totalCreditUsed = 0;
 
+  // Apply credits to unpaid logs
   for (const log of unpaidLogs) {
-    if (remainingAmount <= 0) break;
-
-    // Calculate how much is already allocated to this log
     const allocatedAmount = log.paymentAllocations.reduce(
       (sum, allocation) => sum + allocation.amountCents,
       0,
     );
-
-    const remainingCost = log.costCentsAtTime - allocatedAmount;
+    let remainingCost = log.costCentsAtTime - allocatedAmount;
 
     if (remainingCost <= 0) {
-      // This log is fully paid, skip it
       continue;
     }
 
-    // Allocate as much as possible to this log
-    const allocationAmount = Math.min(remainingAmount, remainingCost);
+    // Apply credits from oldest to newest
+    for (const paymentCredit of paymentsWithCredit) {
+      if (paymentCredit.remainingCredit <= 0) {
+        continue;
+      }
 
-    allocations.push({
-      beerLogId: log.id,
-      amountCents: allocationAmount,
-    });
+      if (remainingCost <= 0) {
+        break;
+      }
 
-    remainingAmount -= allocationAmount;
+      const allocationAmount = Math.min(paymentCredit.remainingCredit, remainingCost);
+
+      allocations.push({
+        beerLogId: log.id,
+        amountCents: allocationAmount,
+        paymentId: paymentCredit.paymentId,
+      });
+
+      paymentCredit.remainingCredit -= allocationAmount;
+      remainingCost -= allocationAmount;
+      totalCreditUsed += allocationAmount;
+
+      // console.warn(paymentsWithCredit);
+    }
   }
 
-  return {
-    allocations,
-    remainingCreditCents: remainingAmount,
-  };
+  return { allocations, creditUsed: totalCreditUsed };
 }
 
 /**

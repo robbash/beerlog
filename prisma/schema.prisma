@@ -76,16 +76,17 @@ model Setting {
 }
 
 model Payment {
-  id           Int                 @id @default(autoincrement())
-  userId       Int
-  amountCents  Int
-  currency     String              @default("EUR")
-  note         String?
-  recordedById Int
-  createdAt    DateTime            @default(now())
-  user         User                @relation(fields: [userId], references: [id])
-  recordedBy   User                @relation("RecordedBy", fields: [recordedById], references: [id])
-  allocations  PaymentAllocation[]
+  id               Int                 @id @default(autoincrement())
+  userId           Int
+  amountCents      Int
+  currency         String              @default("EUR")
+  note             String?
+  recordedById     Int
+  isFullyAllocated Boolean             @default(false)
+  createdAt        DateTime            @default(now())
+  user             User                @relation(fields: [userId], references: [id])
+  recordedBy       User                @relation("RecordedBy", fields: [recordedById], references: [id])
+  allocations      PaymentAllocation[]
 }
 
 model PaymentAllocation {

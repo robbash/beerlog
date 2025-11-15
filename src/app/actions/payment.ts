@@ -3,7 +3,7 @@
 import { auth } from '@/lib/auth';
 import { Roles } from '@/lib/constants';
 import { prisma } from '@/lib/prisma';
-import { allocatePayment, getUserBalanceDetails } from '@/lib/payments';
+import { applyExistingCredits, getUserBalanceDetails } from '@/lib/payments';
 import { z } from 'zod';
 
 const paymentSchema = z.object({
@@ -62,12 +62,9 @@ export async function recordPayment(formData: PaymentFormData): Promise<PaymentR
   const { userId, amountCents, currency, note } = parsed.data;
 
   try {
-    // Calculate how to allocate the payment
-    const { allocations } = await allocatePayment(userId, amountCents);
-
     // Create the payment and allocations in a transaction
     const result = await prisma.$transaction(async (tx) => {
-      // Create the manual payment
+      // Record the payment
       const payment = await tx.payment.create({
         data: {
           userId,
@@ -78,41 +75,56 @@ export async function recordPayment(formData: PaymentFormData): Promise<PaymentR
         },
       });
 
-      // Create allocations
+      // First, apply any existing credits to unpaid logs
+      const { allocations } = await applyExistingCredits(userId);
+      // console.warn(allocations);
+
+      // Create allocations if any
       if (allocations.length > 0) {
-        await tx.paymentAllocation.createMany({
-          data: allocations.map((allocation) => ({
-            paymentId: payment.id,
-            beerLogId: allocation.beerLogId,
-            amountCents: allocation.amountCents,
-          })),
+        await tx.paymentAllocation.createMany({ data: allocations });
+      }
+
+      const payments = await tx.payment.findMany({
+        where: { isFullyAllocated: false },
+        include: {
+          allocations: {
+            where: {
+              paymentId: { in: allocations.map((a) => a.paymentId) }, // false,
+            },
+          },
+        },
+      });
+
+      for (const p of payments) {
+        const totalAllocated = p.allocations.reduce((sum, a) => sum + a.amountCents, 0);
+        // console.warn(p.id, totalAllocated);
+
+        if (totalAllocated >= p.amountCents) {
+          await tx.payment.update({
+            where: { id: p.id },
+            data: { isFullyAllocated: true },
+          });
+        }
+      }
+
+      const uniqueLogIds = allocations.map((a) => a.beerLogId);
+
+      for (const logId of uniqueLogIds) {
+        const log = await tx.beerLog.findUnique({
+          where: { id: logId },
+          include: {
+            paymentAllocations: true,
+          },
         });
 
-        // Update beer logs to mark as paid if fully allocated
-        // Get unique beer log IDs that were allocated to
-        const uniqueLogIds = [...new Set(allocations.map((a) => a.beerLogId))];
+        if (log) {
+          const totalAllocated = log.paymentAllocations.reduce((sum, a) => sum + a.amountCents, 0);
 
-        for (const logId of uniqueLogIds) {
-          const log = await tx.beerLog.findUnique({
-            where: { id: logId },
-            include: {
-              paymentAllocations: true,
-            },
-          });
-
-          if (log) {
-            // Now paymentAllocations includes the ones we just created
-            const totalAllocated = log.paymentAllocations.reduce(
-              (sum, a) => sum + a.amountCents,
-              0,
-            );
-
-            if (totalAllocated >= log.costCentsAtTime) {
-              await tx.beerLog.update({
-                where: { id: log.id },
-                data: { isPaidFor: true },
-              });
-            }
+          if (totalAllocated >= log.costCentsAtTime) {
+            await tx.beerLog.update({
+              where: { id: log.id },
+              data: { isPaidFor: true },
+            });
           }
         }
       }
