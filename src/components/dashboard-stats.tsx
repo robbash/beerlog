@@ -53,7 +53,9 @@ export async function DashboardStats(props: Props) {
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs md:grid-cols-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
       <Card className="@container/card py-3">
         <CardHeader>
-          <CardDescription>{t('cards.total.title')}</CardDescription>
+          <CardDescription className="flex items-center justify-center gap-2">
+            {t('cards.total.title')}
+          </CardDescription>
           <CardTitle className="flex justify-center text-xl font-semibold md:text-base lg:text-2xl">
             <div className="flex gap-2 align-middle">
               <IconBeerFilled className="my-1 size-5 md:size-4 lg:size-6" /> {beersTotal} /{' '}
@@ -113,7 +115,9 @@ export async function DashboardStats(props: Props) {
 
       <Card className="@container/card py-3">
         <CardHeader>
-          <CardDescription>{t('cards.balance.title')}</CardDescription>
+          <CardDescription className="flex items-center justify-center gap-2">
+            {t('cards.balance.title')}
+          </CardDescription>
           <CardTitle className="flex justify-center text-xl font-semibold tabular-nums md:text-base lg:text-2xl">
             <span
               className={cn(
