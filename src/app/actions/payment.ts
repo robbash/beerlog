@@ -62,22 +62,55 @@ export async function recordPayment(formData: PaymentFormData): Promise<PaymentR
   const { userId, amountCents, currency, note } = parsed.data;
 
   try {
+    // Record the payment
+    const payment = await prisma.payment.create({
+      data: {
+        userId,
+        amountCents,
+        currency,
+        note,
+        recordedById: +user.id,
+      },
+    });
+
+    return {
+      ok: true,
+      paymentId: payment.id,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      formError: 'Failed to record payment',
+      values: formData,
+    };
+  }
+}
+
+export async function allocatePayments(userId: number) {
+  const session = await auth();
+
+  if (!session) {
+    return {
+      ok: false,
+      errors: { '401': ['not authorized'] },
+    };
+  }
+
+  const user = session.user!;
+
+  // Only managers and admins can record payments
+  if (user.role === Roles.User) {
+    return {
+      ok: false,
+      errors: { '403': ['insufficient permissions'] },
+    };
+  }
+
+  try {
     // Create the payment and allocations in a transaction
     const result = await prisma.$transaction(async (tx) => {
-      // Record the payment
-      const payment = await tx.payment.create({
-        data: {
-          userId,
-          amountCents,
-          currency,
-          note,
-          recordedById: +user.id,
-        },
-      });
-
       // First, apply any existing credits to unpaid logs
       const { allocations } = await applyExistingCredits(userId);
-      // console.warn(allocations);
 
       // Create allocations if any
       if (allocations.length > 0) {
@@ -97,7 +130,6 @@ export async function recordPayment(formData: PaymentFormData): Promise<PaymentR
 
       for (const p of payments) {
         const totalAllocated = p.allocations.reduce((sum, a) => sum + a.amountCents, 0);
-        // console.warn(p.id, totalAllocated);
 
         if (totalAllocated >= p.amountCents) {
           await tx.payment.update({
@@ -129,19 +161,14 @@ export async function recordPayment(formData: PaymentFormData): Promise<PaymentR
         }
       }
 
-      return payment;
+      return allocations.reduce((sum, allocation) => (sum += allocation.amountCents), 0);
     });
 
-    return {
-      ok: true,
-      paymentId: result.id,
-    };
+    return { ok: true, allocated: result };
   } catch (error) {
-    console.error('Error recording payment:', error);
     return {
       ok: false,
-      formError: 'Failed to record payment',
-      values: formData,
+      error: 'Failed to allocate credits',
     };
   }
 }

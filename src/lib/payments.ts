@@ -127,7 +127,7 @@ export async function applyExistingCredits(
   if (paymentsWithCredit.length === 0) {
     return { allocations: [], creditUsed: 0 };
   }
-  // console.warn(paymentsWithCredit);
+
   // Get unpaid logs ordered by date (oldest first)
   const unpaidLogs = await prisma.beerLog.findMany({
     where: {
@@ -178,8 +178,6 @@ export async function applyExistingCredits(
       paymentCredit.remainingCredit -= allocationAmount;
       remainingCost -= allocationAmount;
       totalCreditUsed += allocationAmount;
-
-      // console.warn(paymentsWithCredit);
     }
   }
 

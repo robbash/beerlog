@@ -198,10 +198,15 @@
       },
       "actions": {
         "recordPayment": "Zahlung erfassen",
+        "allocateCredits": "Credits anwenden",
         "approve": "Bestätigen",
         "unapprove": "Bestätigung entfernen",
         "edit": "Bearbeiten",
         "delete": "Entfernen"
+      },
+      "allocateCreditsToast": {
+        "success": "Erfolgreich {credits} angewendet",
+        "error": "Es gab ein Problem beim Anwenden der Credits"
       },
       "confirmDelete": {
         "title": "Benutzer entfernen",

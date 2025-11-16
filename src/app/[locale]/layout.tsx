@@ -9,6 +9,7 @@ import { Globals, Roles } from '@/lib/constants';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
 import { Wallet, Users as UsersIcon } from 'lucide-react';
+import { Toaster } from '@/components/ui/sonner';
 
 export const metadata: Metadata = {
   title: Globals.title,
@@ -105,6 +106,7 @@ export default async function Layout({
             </div>
           </header>
           <main className="container m-auto px-3 py-6">{children}</main>
+          <Toaster />
         </NextIntlClientProvider>
       </body>
     </html>

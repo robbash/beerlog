@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
-import { recordPayment } from '@/app/actions/payment';
+import { allocatePayments, recordPayment } from '@/app/actions/payment';
 import { User } from '@prisma/client';
 import {
   Select,
@@ -54,10 +54,16 @@ export function PaymentForm(props: Props) {
         note: note || undefined,
       };
 
-      const result = await recordPayment(values);
+      const paymentResult = await recordPayment(values);
 
-      if (!result.ok) {
-        throw new Error(result.formError || 'Failed to record payment. Please try again.');
+      if (!paymentResult.ok) {
+        throw new Error(paymentResult.formError || 'Failed to record payment. Please try again.');
+      }
+
+      const allocationResult = await allocatePayments(userId);
+
+      if (!allocationResult.ok) {
+        throw new Error(allocationResult.error || 'Failed to record payment. Please try again.');
       }
 
       setSuccess(t('success'));

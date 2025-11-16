@@ -198,10 +198,15 @@
       },
       "actions": {
         "recordPayment": "Record Payment",
+        "allocateCredits": "Allocate credits",
         "approve": "Approve",
         "unapprove": "Unapprove",
         "edit": "Edit",
         "delete": "Delete"
+      },
+      "allocateCreditsToast": {
+        "success": "Successfully allocated {credits}",
+        "error": "There was an issue allocating the credits"
       },
       "confirmDelete": {
         "title": "Delete user",

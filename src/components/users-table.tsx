@@ -22,6 +22,7 @@ import {
   ShieldUser,
   UserRoundPlus,
   Coins,
+  HandCoins,
 } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
@@ -47,6 +48,8 @@ import {
   AlertDialogTitle,
   AlertDialogAction,
 } from './ui/alert-dialog';
+import { toast } from 'sonner';
+import { allocatePayments } from '@/app/actions/payment';
 
 interface UserWithBalance extends User {
   balance: {
@@ -72,6 +75,18 @@ export function UsersTable(props: Props) {
       style: 'currency',
       currency: 'EUR',
     }).format(cents / 100);
+  };
+
+  const handleAllocateCredits = (id: number) => {
+    allocatePayments(id)
+      .then((res) => {
+        toast.success(
+          t('allocateCreditsToast.success', { credits: formatCurrency(res.allocated!) }),
+        );
+      })
+      .catch((err) => {
+        toast.error(t('allocateCreditsToast.error'));
+      });
   };
 
   const handleUserApproval = (id: number, approved: boolean) => {
@@ -116,6 +131,8 @@ export function UsersTable(props: Props) {
         </TableHeader>
         <TableBody>
           {users.map((user) => {
+            const { owedCents, creditCents, netBalanceCents } = user.balance;
+
             return (
               <TableRow key={user.id}>
                 <TableCell className="font-medium">
@@ -123,12 +140,8 @@ export function UsersTable(props: Props) {
                 </TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell className="text-right font-medium">
-                  <span
-                    className={cn(
-                      user.balance.netBalanceCents < 0 ? 'text-red-600' : 'text-green-600',
-                    )}
-                  >
-                    {formatCurrency(user.balance.netBalanceCents)}
+                  <span className={cn(netBalanceCents < 0 ? 'text-red-600' : 'text-green-600')}>
+                    {formatCurrency(netBalanceCents)}
                   </span>
                 </TableCell>
                 <TableCell>
@@ -160,8 +173,14 @@ export function UsersTable(props: Props) {
                       <DropdownMenuGroup>
                         <DropdownMenuItem asChild>
                           <Link href={`/payment?userId=${user.id}`}>
-                            <Coins /> {t('actions.recordPayment')}
+                            <HandCoins /> {t('actions.recordPayment')}
                           </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => handleAllocateCredits(user.id)}
+                          disabled={owedCents == 0 || creditCents == 0}
+                        >
+                          <Coins /> {t('actions.allocateCredits')}
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         {user.approved ? (
