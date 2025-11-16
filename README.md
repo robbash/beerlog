@@ -14,7 +14,7 @@ lot. Anyway, Chatty nudged me towards Prisma which I had not used before.
 **EDIT**:
 
 I started using [OpenCode.ai](https://opencode.ai) - that's next level, check it
-out. I added a few features using it together with an Anthropic Pro 
+out. I added a few features using it together with an Anthropic Pro
 subscription.
 
 To contain the AI, I run it in Docker. Check [OpenCode in Docker](https://github.com/robbash/opencode-docker)..
@@ -30,7 +30,16 @@ To contain the AI, I run it in Docker. Check [OpenCode in Docker](https://github
 First, run the development server:
 
 ```bash
-pnpm dev
+pnpm dev prisma migrate deploy
+```
+
+## Database migrations
+
+At the moment there's no production migrations. Please configure your dev env to
+point to the live database, and run the migration manually.
+
+```
+pnpm exec
 ```
 
 ## Building
