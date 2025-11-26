@@ -6,3 +6,4 @@ data:
   APP_NAME: BeerLog
   APP_BASE_URL: https://beerlog.example.org
   DEFAULT_BEER_PRICE_CENTS: "100"
+  PAYPAL_ME_ID: ""

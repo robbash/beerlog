@@ -5,3 +5,4 @@ metadata:
 data:
   APP_NAME: BeerLog Sample
   APP_BASE_URL: https://beerlog.example.org
+  PAYPAY_ME_ID: set-your-id__or__remove

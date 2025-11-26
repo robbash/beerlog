@@ -1,4 +1,9 @@
-import { IconBeerFilled, IconTrendingUp, IconTrendingDown } from '@tabler/icons-react';
+import {
+  IconBeerFilled,
+  IconTrendingUp,
+  IconTrendingDown,
+  IconCreditCard,
+} from '@tabler/icons-react';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getFormatter, getLocale, getTranslations } from 'next-intl/server';
 import { getBeerPriceCents } from '@/lib/settings';
@@ -6,6 +11,7 @@ import { Constants } from '@/lib/constants';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 interface Props {
   beersTotal: number;
@@ -48,6 +54,7 @@ export async function DashboardStats(props: Props) {
   };
 
   const rankBadge = getRankBadge(currentUserRank);
+  const paypalMeId = process.env.PAYPAL_ME_ID;
 
   return (
     <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 px-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs md:grid-cols-4 lg:px-6 @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
@@ -118,7 +125,7 @@ export async function DashboardStats(props: Props) {
           <CardDescription className="flex items-center justify-center gap-2">
             {t('cards.balance.title')}
           </CardDescription>
-          <CardTitle className="flex justify-center text-xl font-semibold tabular-nums md:text-base lg:text-2xl">
+          <CardTitle className="flex flex-col items-center justify-center gap-2 text-xl font-semibold tabular-nums md:text-base lg:text-2xl">
             <span
               className={cn(
                 'text-2xl font-bold md:text-xl lg:text-3xl',
@@ -131,6 +138,19 @@ export async function DashboardStats(props: Props) {
                 signDisplay: 'negative',
               })}
             </span>
+            {paypalMeId && (
+              <Button size="sm" variant="outline" asChild className="mt-1">
+                <Link
+                  href={`https://paypal.me/${paypalMeId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1"
+                >
+                  <IconCreditCard className="size-4" />
+                  {t('cards.balance.chargeUp')}
+                </Link>
+              </Button>
+            )}
           </CardTitle>
         </CardHeader>
       </Card>

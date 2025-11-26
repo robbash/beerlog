@@ -137,7 +137,8 @@
           "trendDown": "vs last month"
         },
         "balance": {
-          "title": "Your Balance"
+          "title": "Your Balance",
+          "chargeUp": "Charge Up"
         },
         "addDrink": {
           "title": "Log a Drink"

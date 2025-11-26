@@ -137,7 +137,8 @@
           "trendDown": "vs letzter Monat"
         },
         "balance": {
-          "title": "Dein Saldo"
+          "title": "Dein Saldo",
+          "chargeUp": "Aufladen"
         },
         "addDrink": {
           "title": "Getränk eintragen"

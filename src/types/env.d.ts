@@ -20,5 +20,6 @@ declare namespace NodeJS {
     SMTP_SENDER?: string;
 
     DEFAULT_BEER_PRICE_CENTS?: string;
+    PAYPAL_ME_ID?: string;
   }
 }
