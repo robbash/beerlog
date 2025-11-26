@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: beerlog
-        image: ghcr.io/robbash/beerlog:0.2.3
+        image: ghcr.io/robbash/beerlog:0.2.4
         imagePullPolicy: Always
         ports:
         - containerPort: 3000
