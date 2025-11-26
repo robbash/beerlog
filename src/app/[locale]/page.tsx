@@ -149,7 +149,11 @@ export default async function Page({
 
       {selectedView === 'ranking' && (
         <div className="mb-6">
-          <DashboardRanking rankings={await getRankings()} currentUserId={balanceUserId} />
+          <DashboardRanking
+            rankings={await getRankings()}
+            currentUserId={balanceUserId}
+            isAdminOrManager={allowShowAll}
+          />
         </div>
       )}
 

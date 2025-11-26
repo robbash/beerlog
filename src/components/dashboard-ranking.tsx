@@ -1,3 +1,5 @@
+'use client';
+
 import {
   Table,
   TableBody,
@@ -6,9 +8,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-import { getTranslations } from 'next-intl/server';
+import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
-import { Trophy } from 'lucide-react';
+import { Eye, Trophy } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useState } from 'react';
 
 interface RankingEntry {
   userId: number;
@@ -20,10 +24,12 @@ interface RankingEntry {
 interface Props {
   rankings: RankingEntry[];
   currentUserId: number;
+  isAdminOrManager?: boolean;
 }
 
-export async function DashboardRanking({ rankings, currentUserId }: Props) {
-  const t = await getTranslations('components.dashboardRanking');
+export function DashboardRanking({ rankings, currentUserId, isAdminOrManager = false }: Props) {
+  const t = useTranslations('components.dashboardRanking');
+  const [isRevealing, setIsRevealing] = useState(false);
 
   const getRankIcon = (rank: number) => {
     if (rank === 1) return '🥇';
@@ -40,11 +46,30 @@ export async function DashboardRanking({ rankings, currentUserId }: Props) {
   return (
     <div className="w-full">
       <div className="p-2">
-        <div className="flex items-center gap-2">
-          <Trophy className="size-4" />
-          {t('title')}
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="flex items-center gap-2">
+              <Trophy className="size-4" />
+              {t('title')}
+            </div>
+            <div className="text-muted-foreground text-sm">{t('description')}</div>
+          </div>
+
+          {isAdminOrManager && (
+            <Button
+              variant="outline"
+              size="sm"
+              onMouseDown={() => setIsRevealing(true)}
+              onMouseUp={() => setIsRevealing(false)}
+              onMouseLeave={() => setIsRevealing(false)}
+              onTouchStart={() => setIsRevealing(true)}
+              onTouchEnd={() => setIsRevealing(false)}
+              className="gap-2"
+            >
+              <Eye className="size-4" />
+            </Button>
+          )}
         </div>
-        <div className="text-muted-foreground text-sm">{t('description')}</div>
       </div>
 
       <Table>
@@ -72,7 +97,7 @@ export async function DashboardRanking({ rankings, currentUserId }: Props) {
                   </div>
                 </TableCell>
                 <TableCell>
-                  {isCurrentUser ? (
+                  {isCurrentUser || isRevealing ? (
                     <span className={cn(isCurrentUser && 'font-semibold')}>
                       {entry.userName}
                       {isCurrentUser && (
