@@ -145,7 +145,18 @@
         }
       }
     },
+    "dashboardRanking": {
+      "title": "Top 10 Bestenliste",
+      "description": "Top-Trinker diesen Monat",
+      "headers": {
+        "rank": "Rang",
+        "name": "Name",
+        "drinks": "Getränke"
+      },
+      "you": "Du"
+    },
     "dashboardToggle": {
+      "showRanking": "Aktuelle Wertung anzeigen",
       "showOwn": "Nur eigene anzeigen",
       "showAll": "Für alle anzeigen"
     },
@@ -159,7 +170,11 @@
       "loading": "Lädt..."
     },
     "dashboardTable": {
-      "caption": "Liste deiner letzten Getränkebuchungen",
+      "title": "Kürzliche Buchungen",
+      "caption": {
+        "all": "Liste aller kürzlichen Getränkebuchungen",
+        "own": "Liste deiner letzten Getränkebuchungen"
+      },
       "headers": {
         "date": "Datum",
         "user": "Benutzer",

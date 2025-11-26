@@ -1,6 +1,6 @@
 import { format, subDays } from 'date-fns';
 import { createBeerLog, createPayment, createUser } from '../../utils/factories';
-import { allocatePayments, getUserBalance, recordPayment } from '@/app/actions/payment';
+import { allocatePayments, recordPayment } from '@/app/actions/payment';
 import * as auth from '@/lib/auth';
 import { dateFormat, Roles } from '@/lib/constants';
 import { prisma } from '@/lib/prisma';

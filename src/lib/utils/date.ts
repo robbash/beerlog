@@ -1,4 +1,6 @@
+import { format, startOfMonth } from 'date-fns';
 import { getFormatter } from 'next-intl/server';
+import { dateFormat } from '../constants';
 
 export async function formatDateTime(date: Date) {
   const format = await getFormatter();
@@ -13,3 +15,5 @@ export async function formatDateTime(date: Date) {
 
   return formatted;
 }
+
+export const getCurrentMonthStart = () => format(startOfMonth(new Date()), dateFormat);

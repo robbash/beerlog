@@ -145,8 +145,19 @@
         }
       }
     },
+    "dashboardRanking": {
+      "title": "Top 10 Leaderboard",
+      "description": "Top drinkers this month",
+      "headers": {
+        "rank": "Rank",
+        "name": "Name",
+        "drinks": "Drinks"
+      },
+      "you": "You"
+    },
     "dashboardToggle": {
-      "showOwn": "Only display own consuption.",
+      "showRanking": "Show the current ranking",
+      "showOwn": "Only display own consuption",
       "showAll": "Display consumption for all users"
     },
     "dashboardUserFilter": {
@@ -159,7 +170,11 @@
       "loading": "Loading..."
     },
     "dashboardTable": {
-      "caption": "A list of your recent beverage logs.",
+      "title": "Recent logs",
+      "caption": {
+        "all": "A list of all recent beverage logs.",
+        "own": "A list of your recent beverage logs."
+      },
       "headers": {
         "date": "Date",
         "user": "User",
