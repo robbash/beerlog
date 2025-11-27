@@ -48,14 +48,18 @@ export default async function Page({
 
   // Determine which user to show data for
   let userIdFilter: { userId?: number } = {};
+  // Manager/admin viewing specific user
   if (selectedView === 'all' && filterUserId) {
-    // Manager/admin viewing specific user
     userIdFilter = { userId: filterUserId };
-  } else if (selectedView === 'own') {
-    // Regular user viewing own data
+  }
+  // Manager/admin viewing all users
+  else if (selectedView === 'all') {
+    userIdFilter = {};
+  }
+  // Regular user viewing own data or on ranking view
+  else {
     userIdFilter = { userId: +session.user.id };
   }
-  // If isShowAll && !filterUserId, show all users (empty filter)
 
   const logsTotal = await prisma.beerLog.findMany({
     where: { ...userIdFilter },
