@@ -1,7 +1,7 @@
 'use server';
 
-import { prisma } from '@/lib/prisma';
-import { sendEmail } from '@/lib/email';
+import { prisma } from '@/lib/server/prisma';
+import { sendEmail } from '@/lib/server/email';
 import { hash } from 'bcryptjs';
 import crypto from 'crypto';
 import { passwordPatterns } from '@/lib/password.schema';

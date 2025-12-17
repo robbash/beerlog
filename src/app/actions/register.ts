@@ -1,8 +1,8 @@
 'use server';
 
 import { Roles } from '@/lib/constants';
-import { sendEmail } from '@/lib/email';
-import { prisma } from '@/lib/prisma';
+import { sendEmail } from '@/lib/server/email';
+import { prisma } from '@/lib/server/prisma';
 import bcrypt from 'bcryptjs';
 
 export async function registerAccount(

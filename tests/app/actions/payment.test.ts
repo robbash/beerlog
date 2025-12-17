@@ -1,13 +1,13 @@
 import { format, subDays } from 'date-fns';
 import { createBeerLog, createPayment, createUser } from '../../utils/factories';
 import { allocatePayments, recordPayment } from '@/app/actions/payment';
-import * as auth from '@/lib/auth';
+import * as auth from '@/lib/server/auth';
 import { dateFormat, Roles } from '@/lib/constants';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/server/prisma';
 import { resetDatabase } from '../../utils/helpers';
-import { getUserBalanceDetails } from '@/lib/payments';
+import { getUserBalanceDetails } from '@/lib/server/payments';
 
-vi.mock('@/lib/auth', () => ({
+vi.mock('@/lib/server/auth', () => ({
   auth: vi.fn(),
 }));
 

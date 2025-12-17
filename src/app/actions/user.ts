@@ -1,8 +1,8 @@
 'use server';
 
-import { signIn } from '@/lib/auth';
-import { sendEmail } from '@/lib/email';
-import { prisma } from '@/lib/prisma';
+import { signIn } from '@/lib/server/auth';
+import { sendEmail } from '@/lib/server/email';
+import { prisma } from '@/lib/server/prisma';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 
 export type LoginFormState = {

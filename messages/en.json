@@ -173,7 +173,8 @@
       "title": "Recent logs",
       "caption": {
         "all": "A list of all recent beverage logs.",
-        "own": "A list of your recent beverage logs."
+        "own": "A list of your recent beverage logs.",
+        "incompleteNote": "The last date's total may be incomplete due to pagination"
       },
       "headers": {
         "date": "Date",
@@ -181,6 +182,15 @@
         "quantity": "Quantity",
         "status": "Status",
         "actions": ""
+      },
+      "entries": {
+        "single": "entry",
+        "multiple": "entries"
+      },
+      "paymentStatus": {
+        "paid": "Fully paid",
+        "partial": "Partially paid: {allocated}/{total} cents",
+        "unpaid": "Unpaid"
       }
     },
     "datePicker": {

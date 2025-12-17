@@ -1,4 +1,3 @@
-// import { User } from '@/types/next-auth';
 import { auth, User } from './auth';
 
 export async function requireAuth() {

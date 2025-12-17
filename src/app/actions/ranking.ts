@@ -1,10 +1,10 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/server/prisma';
 import { getCurrentMonthStart } from '@/lib/utils/date';
 
 export async function getCurrentRank(userId: number) {
   const currentMonthStart = getCurrentMonthStart();
 
-  const top3 = await prisma.beerLog.groupBy({
+  const rankingData = await prisma.beerLog.groupBy({
     by: ['userId'],
     where: {
       date: { gte: currentMonthStart },
@@ -12,17 +12,41 @@ export async function getCurrentRank(userId: number) {
     _sum: {
       quantity: true,
     },
-    orderBy: {
-      _sum: {
-        quantity: 'desc',
+    orderBy: [
+      {
+        _sum: {
+          quantity: 'desc',
+        },
       },
-    },
-    take: 3,
+      {
+        userId: 'asc', // Stable secondary sort
+      },
+    ],
   });
 
-  const userRank = top3.findIndex((entry) => entry.userId === userId);
+  if (rankingData.length === 0) {
+    return null;
+  }
 
-  return userRank !== -1 ? userRank + 1 : null;
+  // Calculate rank with proper tie handling
+  let currentRank = 1;
+  const rankings = rankingData.map((entry, index) => {
+    if (index > 0 && entry._sum.quantity !== rankingData[index - 1]._sum.quantity) {
+      currentRank = index + 1;
+    }
+    return {
+      userId: entry.userId,
+      rank: currentRank,
+      quantity: entry._sum.quantity || 0,
+    };
+  });
+
+  // Find user's rank (top 3 only get medal)
+  const userRanking = rankings.find((r) => r.userId === userId);
+  if (!userRanking) return null;
+
+  // Only return rank if in top 3
+  return userRanking.rank <= 3 ? userRanking.rank : null;
 }
 
 export async function getRankings() {
@@ -36,12 +60,16 @@ export async function getRankings() {
     _sum: {
       quantity: true,
     },
-    orderBy: {
-      _sum: {
-        quantity: 'desc',
+    orderBy: [
+      {
+        _sum: {
+          quantity: 'desc',
+        },
       },
-    },
-    take: 10,
+      {
+        userId: 'asc', // Stable secondary sort
+      },
+    ],
   });
 
   if (rankingData.length === 0) {
@@ -55,15 +83,24 @@ export async function getRankings() {
     select: { id: true, firstName: true, lastName: true },
   });
 
-  // Create ranking entries with user names
-  return rankingData.map((entry, index) => {
+  // Calculate rank with proper tie handling (competition ranking)
+  let currentRank = 1;
+  const rankings = rankingData.map((entry, index) => {
+    // When quantity changes, update rank to current position + 1
+    if (index > 0 && entry._sum.quantity !== rankingData[index - 1]._sum.quantity) {
+      currentRank = index + 1;
+    }
+
     const user = rankingUsers.find((u) => u.id === entry.userId);
 
     return {
       userId: entry.userId,
       userName: user ? `${user.firstName} ${user.lastName}` : 'Unknown',
       quantity: entry._sum.quantity || 0,
-      rank: index + 1,
+      rank: currentRank,
     };
   });
+
+  // Return top 10 entries
+  return rankings.slice(0, 10);
 }

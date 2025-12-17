@@ -5,8 +5,8 @@ import {
   getUserBalanceDetails,
   applyExistingCredits,
   isBeerLogFullyPaid,
-  getLogPaymentStatus,
-} from '@/lib/payments';
+} from '@/lib/server/payments';
+import { getLogPaymentStatus } from '@/lib/shared/payments';
 import {
   createUser,
   createBeerLog,

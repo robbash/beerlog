@@ -173,7 +173,8 @@
       "title": "Kürzliche Buchungen",
       "caption": {
         "all": "Liste aller kürzlichen Getränkebuchungen",
-        "own": "Liste deiner letzten Getränkebuchungen"
+        "own": "Liste deiner letzten Getränkebuchungen",
+        "incompleteNote": "Die Summe der letzten Datumsgruppe mag aufgrund der Paginierung nicht vollständig sein"
       },
       "headers": {
         "date": "Datum",
@@ -181,6 +182,15 @@
         "quantity": "Anzahl",
         "status": "Status",
         "actions": ""
+      },
+      "entries": {
+        "single": "Eintrag",
+        "multiple": "Einträge"
+      },
+      "paymentStatus": {
+        "paid": "Vollständig bezahlt",
+        "partial": "Teilweise bezahlt: {allocated}/{total} Cent",
+        "unpaid": "Unbezahlt"
       }
     },
     "datePicker": {

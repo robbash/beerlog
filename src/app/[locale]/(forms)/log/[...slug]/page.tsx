@@ -1,7 +1,7 @@
 import { BeerLogForm } from '@/components/forms/beerlog-form';
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/server/auth';
 import { dateFormat, dateRegex, logFormNewForUser, logFormToday, Roles } from '@/lib/constants';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/server/prisma';
 import { User } from '@prisma/client';
 import { redirect } from 'next/navigation';
 import { format } from 'date-fns';

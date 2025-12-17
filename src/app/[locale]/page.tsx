@@ -5,10 +5,10 @@ import { DashboardUserFilter } from '@/components/dashboard-user-filter';
 import { DashboardLoadMore } from '@/components/dashboard-load-more';
 import { DashboardRanking } from '@/components/dashboard-ranking';
 import { Button } from '@/components/ui/button';
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/server/auth';
 import { dateFormat, logFormNewForUser, Roles } from '@/lib/constants';
-import { prisma } from '@/lib/prisma';
-import { getUserBalanceDetails } from '@/lib/payments';
+import { prisma } from '@/lib/server/prisma';
+import { getUserBalanceDetails } from '@/lib/server/payments';
 import { format, startOfMonth, subMonths } from 'date-fns';
 import { Plus } from 'lucide-react';
 import { getLocale, getTranslations } from 'next-intl/server';
@@ -48,9 +48,11 @@ export default async function Page({
 
   // Determine which user to show data for
   let userIdFilter: { userId?: number } = {};
+  let isSingleUser = false;
   // Manager/admin viewing specific user
   if (selectedView === 'all' && filterUserId) {
     userIdFilter = { userId: filterUserId };
+    isSingleUser = true;
   }
   // Manager/admin viewing all users
   else if (selectedView === 'all') {
@@ -163,7 +165,7 @@ export default async function Page({
 
       {selectedView !== 'ranking' && (
         <>
-          <DashboardTable users={users} logs={logs} />
+          <DashboardTable users={users} isSingleUser={isSingleUser} logs={logs} />
 
           <DashboardLoadMore hasMore={hasMore} currentLimit={limit} />
         </>
