@@ -1,7 +1,7 @@
 import { UsersTable } from '@/components/users-table';
-import { auth } from '@/lib/auth';
-import { prisma } from '@/lib/prisma';
-import { getUserBalanceDetails } from '@/lib/payments';
+import { auth } from '@/lib/server/auth';
+import { prisma } from '@/lib/server/prisma';
+import { getUserBalanceDetails } from '@/lib/server/payments';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 import { Roles } from '@/lib/constants';

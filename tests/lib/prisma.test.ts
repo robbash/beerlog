@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/server/prisma';
 
 describe('Prisma', () => {
   describe('mock setup', () => {

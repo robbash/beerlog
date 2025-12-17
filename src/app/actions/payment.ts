@@ -1,9 +1,9 @@
 'use server';
 
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/server/auth';
 import { Roles } from '@/lib/constants';
-import { prisma } from '@/lib/prisma';
-import { applyExistingCredits, getUserBalanceDetails } from '@/lib/payments';
+import { prisma } from '@/lib/server/prisma';
+import { applyExistingCredits, getUserBalanceDetails } from '@/lib/server/payments';
 import { z } from 'zod';
 
 const paymentSchema = z.object({

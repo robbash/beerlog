@@ -1,10 +1,10 @@
 'use server';
 
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/server/auth';
 import { Roles } from '@/lib/constants';
-import { logSchema } from '@/lib/forms';
-import { prisma } from '@/lib/prisma';
-import { getBeerPriceCents } from '@/lib/settings';
+import { logSchema } from '@/lib/forms.schema';
+import { prisma } from '@/lib/server/prisma';
+import { getBeerPriceCents } from '@/lib/server/settings';
 import { BeerLog } from '@prisma/client';
 
 export type Result = {

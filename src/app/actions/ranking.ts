@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/server/prisma';
 import { getCurrentMonthStart } from '@/lib/utils/date';
 
 export async function getCurrentRank(userId: number) {

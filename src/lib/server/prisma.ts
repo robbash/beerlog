@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { auth } from './auth';
-import { shallowDiff, type Json } from './utils/object';
-import { lcFirst } from './utils/string';
+import { shallowDiff, type Json } from '@/lib/utils/object';
+import { lcFirst } from '@/lib/utils/string';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 

@@ -1,7 +1,7 @@
 import { PaymentHistoryTable } from '@/components/payment-history-table';
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/server/auth';
 import { Roles } from '@/lib/constants';
-import { prisma } from '@/lib/prisma';
+import { prisma } from '@/lib/server/prisma';
 import { redirect } from 'next/navigation';
 import { getTranslations } from 'next-intl/server';
 

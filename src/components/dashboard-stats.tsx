@@ -6,7 +6,7 @@ import {
 } from '@tabler/icons-react';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getFormatter, getLocale, getTranslations } from 'next-intl/server';
-import { getBeerPriceCents } from '@/lib/settings';
+import { getBeerPriceCents } from '@/lib/server/settings';
 import { Constants } from '@/lib/constants';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';

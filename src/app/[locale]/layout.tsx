@@ -2,7 +2,7 @@ import '@/app/globals.css';
 
 import { NextIntlClientProvider } from 'next-intl';
 import Link from 'next/link';
-import { auth, signOut } from '@/lib/auth';
+import { auth, signOut } from '@/lib/server/auth';
 import { Button } from '@/components/ui/button';
 import { Metadata, Viewport } from 'next';
 import { Globals, Roles } from '@/lib/constants';

@@ -1,5 +1,5 @@
 import { RegisterForm } from '@/components/forms/register-form';
-import { auth } from '@/lib/auth';
+import { auth } from '@/lib/server/auth';
 import { redirect } from 'next/navigation';
 
 export default async function Page({
