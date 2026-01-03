@@ -51,7 +51,7 @@ export default async function Layout({
                   height={24}
                   width={24}
                 />
-                {Globals.title}
+                <span className="hidden md:inline">{Globals.title}</span>
               </Link>
               <nav>
                 <div className="flex items-center gap-2">
