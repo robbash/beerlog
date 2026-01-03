@@ -133,99 +133,99 @@ export function BeerLogForm(props: Props) {
         </CardHeader>
 
         <CardContent>
-        <form onSubmit={onSubmit}>
-          {error && (
-            <Alert variant="destructive">
-              <AlertCircleIcon />
-              <AlertTitle>{t('error.title')}</AlertTitle>
-              <AlertDescription>
-                <p>{error}</p>
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {success && (
-            <Alert className="mb-4 border-green-600 bg-green-50 text-green-800">
-              <AlertTitle>{success}</AlertTitle>
-            </Alert>
-          )}
-
-          <Input name="id" type="hidden" value={id} />
-
-          <div className="grid gap-6">
-            <div className="grid gap-3">
-              <Label htmlFor="date">{t('form.date')}</Label>
-              <DatePicker
-                disabled={lockDate}
-                defaultValue={formDate ? new Date(formDate) : undefined}
-                onSelect={handleFormDate}
-              />
-            </div>
-
-            <div className="grid gap-3">
-              <Label htmlFor="quantity">{t('form.quantity')}</Label>
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant="default"
-                  className="flex-1"
-                  onClick={() => increaseQuantity()}
-                >
-                  <Plus />
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="flex-none"
-                  onClick={() => increaseQuantity(-1)}
-                >
-                  <Minus />
-                </Button>
-              </div>
-
-              <Input
-                name="quantity"
-                type="number"
-                value={formQuantity}
-                required
-                className="text-center"
-              />
-            </div>
-
-            {users && (
-              <div className="grid gap-3">
-                <Label htmlFor="userId">{t('form.userId')}</Label>
-                <Select name="userId" defaultValue={String(userId)}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder={t('form.userIdPlaceholder')} />
-                  </SelectTrigger>
-                  <SelectContent className="bg-white">
-                    {users.map((user) => (
-                      <SelectItem key={user.id} value={String(user.id)}>
-                        {user.firstName} {user.lastName}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
+          <form onSubmit={onSubmit}>
+            {error && (
+              <Alert variant="destructive">
+                <AlertCircleIcon />
+                <AlertTitle>{t('error.title')}</AlertTitle>
+                <AlertDescription>
+                  <p>{error}</p>
+                </AlertDescription>
+              </Alert>
             )}
 
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading && <LoaderCircle className="animate-spin" />}
-              {t('button.submit')}
-            </Button>
+            {success && (
+              <Alert className="mb-4 border-green-600 bg-green-50 text-green-800">
+                <AlertTitle>{success}</AlertTitle>
+              </Alert>
+            )}
 
-            <Button
-              type="button"
-              className="w-full"
-              variant="secondary"
-              onClick={() => router.push('/')}
-            >
-              {t('button.cancel')}
-            </Button>
-          </div>
-        </form>
-      </CardContent>
+            <Input name="id" type="hidden" value={id} />
+
+            <div className="grid gap-6">
+              <div className="grid gap-3">
+                <Label htmlFor="date">{t('form.date')}</Label>
+                <DatePicker
+                  disabled={lockDate}
+                  defaultValue={formDate ? new Date(formDate) : undefined}
+                  onSelect={handleFormDate}
+                />
+              </div>
+
+              <div className="grid gap-3">
+                <Label htmlFor="quantity">{t('form.quantity')}</Label>
+                <div className="flex gap-2">
+                  <Button
+                    type="button"
+                    variant="default"
+                    className="flex-1"
+                    onClick={() => increaseQuantity()}
+                  >
+                    <Plus />
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="flex-none"
+                    onClick={() => increaseQuantity(-1)}
+                  >
+                    <Minus />
+                  </Button>
+                </div>
+
+                <Input
+                  name="quantity"
+                  type="number"
+                  value={formQuantity}
+                  required
+                  className="text-center"
+                />
+              </div>
+
+              {users && (
+                <div className="grid gap-3">
+                  <Label htmlFor="userId">{t('form.userId')}</Label>
+                  <Select name="userId" defaultValue={String(userId)}>
+                    <SelectTrigger className="w-full">
+                      <SelectValue placeholder={t('form.userIdPlaceholder')} />
+                    </SelectTrigger>
+                    <SelectContent className="bg-white">
+                      {users.map((user) => (
+                        <SelectItem key={user.id} value={String(user.id)}>
+                          {user.firstName} {user.lastName}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+
+              <Button type="submit" className="w-full" disabled={isLoading}>
+                {isLoading && <LoaderCircle className="animate-spin" />}
+                {t('button.submit')}
+              </Button>
+
+              <Button
+                type="button"
+                className="w-full"
+                variant="secondary"
+                onClick={() => router.push('/')}
+              >
+                {t('button.cancel')}
+              </Button>
+            </div>
+          </form>
+        </CardContent>
       </Card>
     </>
   );
