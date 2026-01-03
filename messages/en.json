@@ -93,6 +93,26 @@
       "button": {
         "submit": "Submit",
         "cancel": "Cancel"
+      },
+      "decreaseConfirmation": {
+        "step1": {
+          "title": "Wait, are you sure?",
+          "description": "You're about to decrease your drink count. This seems suspicious... Are you really sure about this?",
+          "confirm": "Yes, I'm Sure",
+          "cancel": "Never Mind"
+        },
+        "step2": {
+          "title": "Really though?",
+          "description": "Think carefully. Decreasing your count means you drank LESS. That's not the spirit! Last chance to reconsider.",
+          "confirm": "Go Back",
+          "cancel": "Proceed Anyway"
+        },
+        "step3": {
+          "title": "Final Warning!",
+          "description": "This is your last chance. Once you decrease, there's no going back. Are you absolutely, positively, 100% certain?",
+          "confirm": "Actually, Cancel This",
+          "cancel": "Yes, Decrease It"
+        }
       }
     },
     "payment": {

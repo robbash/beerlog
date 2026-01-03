@@ -21,6 +21,7 @@ import DatePicker from '../date-picker';
 import { Alert, AlertDescription, AlertTitle } from '../ui/alert';
 import { format } from 'date-fns';
 import { dateFormat } from '@/lib/constants';
+import { DecreaseConfirmationDialog } from '../decrease-confirmation-dialog';
 
 interface Props {
   id?: number;
@@ -45,11 +46,32 @@ export function BeerLogForm(props: Props) {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [formQuantity, setFormQuantity] = useState<number>(quantity);
+  const [showDecreaseDialog, setShowDecreaseDialog] = useState<boolean>(false);
+  const [pendingDecrease, setPendingDecrease] = useState<number>(0);
 
   function increaseQuantity(add: number = 1) {
     const newValue = Math.max(1, formQuantity + add);
 
+    // If decreasing, show confirmation dialog
+    if (add < 0 && newValue < formQuantity) {
+      setPendingDecrease(add);
+      setShowDecreaseDialog(true);
+      return;
+    }
+
     setFormQuantity(newValue);
+  }
+
+  function handleDecreaseConfirm() {
+    const newValue = Math.max(1, formQuantity + pendingDecrease);
+    setFormQuantity(newValue);
+    setShowDecreaseDialog(false);
+    setPendingDecrease(0);
+  }
+
+  function handleDecreaseCancel() {
+    setShowDecreaseDialog(false);
+    setPendingDecrease(0);
   }
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
@@ -96,14 +118,21 @@ export function BeerLogForm(props: Props) {
   }
 
   return (
-    <Card>
-      <CardHeader className="text-center">
-        <CardTitle className="text-xl">{t(`title.${isNew ? 'add' : 'edit'}`)}</CardTitle>
+    <>
+      <DecreaseConfirmationDialog
+        open={showDecreaseDialog}
+        onConfirm={handleDecreaseConfirm}
+        onCancel={handleDecreaseCancel}
+      />
 
-        <CardDescription>{t(`description.${isNew ? 'add' : 'edit'}`)}</CardDescription>
-      </CardHeader>
+      <Card>
+        <CardHeader className="text-center">
+          <CardTitle className="text-xl">{t(`title.${isNew ? 'add' : 'edit'}`)}</CardTitle>
 
-      <CardContent>
+          <CardDescription>{t(`description.${isNew ? 'add' : 'edit'}`)}</CardDescription>
+        </CardHeader>
+
+        <CardContent>
         <form onSubmit={onSubmit}>
           {error && (
             <Alert variant="destructive">
@@ -197,6 +226,7 @@ export function BeerLogForm(props: Props) {
           </div>
         </form>
       </CardContent>
-    </Card>
+      </Card>
+    </>
   );
 }

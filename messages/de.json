@@ -93,6 +93,26 @@
       "button": {
         "submit": "Absenden",
         "cancel": "Abbrechen"
+      },
+      "decreaseConfirmation": {
+        "step1": {
+          "title": "Warte, bist du sicher?",
+          "description": "Du bist dabei, deine Getränkeanzahl zu verringern. Das scheint verdächtig... Bist du dir wirklich sicher?",
+          "confirm": "Ja, ich bin sicher",
+          "cancel": "Doch nicht"
+        },
+        "step2": {
+          "title": "Wirklich?",
+          "description": "Denk nochmal nach. Weniger Getränke bedeutet, du hast WENIGER getrunken. Das ist nicht im Sinne der Sache! Letzte Chance zum Überdenken.",
+          "confirm": "Zurück",
+          "cancel": "Trotzdem fortfahren"
+        },
+        "step3": {
+          "title": "Letzte Warnung!",
+          "description": "Das ist deine letzte Chance. Wenn du jetzt verringerst, gibt es kein Zurück. Bist du dir absolut, positiv, 100% sicher?",
+          "confirm": "Doch abbrechen",
+          "cancel": "Ja, verringern"
+        }
       }
     },
     "payment": {
