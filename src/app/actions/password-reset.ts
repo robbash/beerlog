@@ -5,6 +5,7 @@ import { sendEmail } from '@/lib/server/email';
 import { hash } from 'bcryptjs';
 import crypto from 'crypto';
 import { passwordPatterns } from '@/lib/password.schema';
+import { getPasswordResetEmail } from '@/lib/server/email-templates';
 
 const resetTokenExpiryHours = 24;
 
@@ -38,10 +39,14 @@ export async function requestPasswordReset(email: string) {
 
     const resetLink = `${process.env.APP_BASE_URL}/reset-password?token=${token}`;
 
-    const emailText = `Hello ${user.firstName},\n\nYou have requested to reset your password for your BeerLog account.\n\nPlease click the following link to reset your password:
-${resetLink}\n\nThis link will expire in ${resetTokenExpiryHours} hours.\n\n If you did not request this password reset, please ignore this email.`;
+    const passwordResetEmail = await getPasswordResetEmail({
+      firstName: user.firstName,
+      resetLink,
+      expiryHours: resetTokenExpiryHours,
+      locale: (user.locale as 'en' | 'de') || 'en',
+    });
 
-    await sendEmail(user.email, 'Password Reset Request', emailText);
+    await sendEmail(user.email, passwordResetEmail.subject, passwordResetEmail.body);
 
     return { success: true };
   } catch (error) {

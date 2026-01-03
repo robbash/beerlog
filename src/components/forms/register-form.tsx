@@ -8,7 +8,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircleIcon, LoaderCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { passwordPatterns } from '@/lib/password.schema';
 import { registerAccount } from '@/app/actions/register';
@@ -17,6 +17,7 @@ import { userEmailExists } from '@/app/actions/user';
 export function RegisterForm() {
   const t = useTranslations('pages.register');
   const tError = useTranslations('errors');
+  const locale = useLocale();
 
   const router = useRouter();
 
@@ -59,7 +60,7 @@ export function RegisterForm() {
       return;
     }
 
-    const result = await registerAccount(firstName, lastName, email, password);
+    const result = await registerAccount(firstName, lastName, email, password, locale);
 
     if (result) {
       setErrorMessage(undefined);

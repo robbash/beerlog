@@ -250,7 +250,35 @@
     "register": "Registrieren",
     "users": "Benutzer",
     "payments": "Zahlungen",
-    "greetings": "Hey {name}"
+    "greetings": "Hey {name}",
+    "language": "Sprache"
+  },
+  "settings": {
+    "language": {
+      "title": "Sprache",
+      "description": "Wähle deine bevorzugte Sprache",
+      "en": "Englisch",
+      "de": "Deutsch",
+      "updated": "Sprache erfolgreich aktualisiert"
+    }
+  },
+  "emails": {
+    "welcome": {
+      "subject": "Willkommen bei BeerLog",
+      "body": "Hallo {firstName},\n\nDein Account wurde erstellt und wartet auf Freigabe. Du erhältst eine E-Mail, sobald du loslegen kannst..."
+    },
+    "approval": {
+      "subject": "Dein BeerLog-Account wurde freigegeben",
+      "body": "Hallo {firstName},\n\nGute Nachrichten - du kannst BeerLog jetzt nutzen..."
+    },
+    "newUserRegistration": {
+      "subject": "Neue Benutzer-Registrierung in BeerLog",
+      "body": "Hallo,\n\nEin neuer Benutzer hat sich registriert und wartet auf Freigabe."
+    },
+    "passwordReset": {
+      "subject": "Passwort zurücksetzen",
+      "body": "Hallo {firstName},\n\nDu hast angefordert, dein Passwort für deinen BeerLog-Account zurückzusetzen.\n\nBitte klicke auf den folgenden Link, um dein Passwort zurückzusetzen:\n{resetLink}\n\nDieser Link läuft in {expiryHours} Stunden ab.\n\nWenn du diese Anfrage nicht gestellt hast, ignoriere diese E-Mail bitte."
+    }
   },
   "formFooter": {
     "hint": "Zum Wohl"

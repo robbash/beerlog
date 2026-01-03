@@ -250,7 +250,35 @@
     "register": "Register",
     "users": "Users",
     "payments": "Payments",
-    "greetings": "Hey {name}"
+    "greetings": "Hey {name}",
+    "language": "Language"
+  },
+  "settings": {
+    "language": {
+      "title": "Language",
+      "description": "Select your preferred language",
+      "en": "English",
+      "de": "German",
+      "updated": "Language updated successfully"
+    }
+  },
+  "emails": {
+    "welcome": {
+      "subject": "Welcome to BeerLog",
+      "body": "Hey {firstName},\n\nYour account has been created and is waiting for approval. You will receive an email when you're ready to go..."
+    },
+    "approval": {
+      "subject": "Your account for BeerLog has been approved",
+      "body": "Hey {firstName},\n\nGood news - you can start using BeerLog now..."
+    },
+    "newUserRegistration": {
+      "subject": "New user registration in BeerLog",
+      "body": "Hey there,\n\nA new user registered and is waiting to get approved."
+    },
+    "passwordReset": {
+      "subject": "Password Reset Request",
+      "body": "Hello {firstName},\n\nYou have requested to reset your password for your BeerLog account.\n\nPlease click the following link to reset your password:\n{resetLink}\n\nThis link will expire in {expiryHours} hours.\n\nIf you did not request this password reset, please ignore this email."
+    }
   },
   "formFooter": {
     "hint": "Cheers"

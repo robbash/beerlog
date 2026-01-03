@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import Link from 'next/link';
 import { FormEvent, useState } from 'react';
 import { AlertCircleIcon, LoaderCircle } from 'lucide-react';
@@ -15,6 +15,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 export function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
+  const locale = useLocale();
 
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
@@ -29,7 +30,7 @@ export function LoginForm() {
 
     setLoading(true);
 
-    const result = await loginAction(formData);
+    const result = await loginAction(formData, locale);
 
     if (result.error) {
       setErrorMessage(result.error);

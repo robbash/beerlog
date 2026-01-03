@@ -4,15 +4,21 @@ import { Roles } from '@/lib/constants';
 import { sendEmail } from '@/lib/server/email';
 import { prisma } from '@/lib/server/prisma';
 import bcrypt from 'bcryptjs';
+import {
+  getWelcomeEmail,
+  getNewUserRegistrationEmail,
+} from '@/lib/server/email-templates';
 
 export async function registerAccount(
   firstName: string,
   lastName: string,
   email: string,
   password: string,
+  locale?: string,
 ): Promise<boolean> {
   try {
     const passwordHash = await bcrypt.hash(password, 10);
+    const userLocale = locale && ['en', 'de'].includes(locale) ? locale : 'en';
     const user = await prisma.user.create({
       data: {
         firstName,
@@ -20,29 +26,28 @@ export async function registerAccount(
         email: email.toLowerCase().trim(),
         passwordHash,
         role: Roles.User,
+        locale: userLocale,
       },
     });
 
     if (user) {
-      const result = await sendEmail(
-        email,
-        'Welcome to BeerLog',
-        "Hey there,\nYour account has been created and is waiting for approval. You will receive an email when you're ready to go...",
-      );
+      const welcomeEmail = await getWelcomeEmail({
+        firstName: user.firstName,
+        locale: userLocale as 'en' | 'de',
+      });
+      const result = await sendEmail(email, welcomeEmail.subject, welcomeEmail.body);
 
-      const managerEmails = await prisma.user.findMany({
-        select: { email: true },
+      const managers = await prisma.user.findMany({
+        select: { email: true, locale: true },
         where: { role: { in: [Roles.Manager, Roles.Admin] } },
       });
 
-      managerEmails.forEach(
-        async (record) =>
-          await sendEmail(
-            record.email,
-            'New user registration in BeerLog',
-            'Hey there,\nA new user registered and is waiting to get approved.',
-          ),
-      );
+      for (const manager of managers) {
+        const notificationEmail = await getNewUserRegistrationEmail({
+          locale: (manager.locale as 'en' | 'de') || 'en',
+        });
+        await sendEmail(manager.email, notificationEmail.subject, notificationEmail.body);
+      }
 
       return !!result.response;
     }
