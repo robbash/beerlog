@@ -1,12 +1,20 @@
 resources:
-- ../../base
+- ../../base/common
+# - ../../base/ingress
+- ../../base/gateway
 
 namespace: beerlog-sample
 
 patches:
-- target:
-    kind: Ingress
-    name: ingress
-  path: ingress.json
 - path: replicas.yaml
 - path: configmap.yaml
+# For ingress use:
+#- target:
+#    kind: Ingress
+#    name: ingress
+#  path: ingress.json
+# For gateway use:
+- target:
+    kind: HTTPRoute
+    name: httproute
+  path: httproute.json

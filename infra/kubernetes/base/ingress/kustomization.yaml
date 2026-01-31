@@ -1,0 +1,11 @@
+resources:
+- ingress.yaml
+
+labels:
+  - pairs:
+      app: beerlog
+
+namePrefix:
+  beerlog-
+
+namespace: beerlog
