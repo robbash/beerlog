@@ -22,7 +22,16 @@ export type BeerLogFormData = {
 };
 
 export async function saveLog(formData: BeerLogFormData): Promise<Result> {
+  // Auth check must happen before any data processing
   const session = await auth();
+
+  if (!session) {
+    return {
+      ok: false,
+      errors: { '401': ['not authorized'] },
+    };
+  }
+
   const parsed = logSchema.safeParse(formData);
 
   if (!parsed.success) {
@@ -33,13 +42,6 @@ export async function saveLog(formData: BeerLogFormData): Promise<Result> {
       errors: fieldErrors,
       formError: formErrors.join(' '),
       values: formData,
-    };
-  }
-
-  if (!session) {
-    return {
-      ok: false,
-      errors: { '401': ['not authorized'] },
     };
   }
 
@@ -56,20 +58,29 @@ export async function saveLog(formData: BeerLogFormData): Promise<Result> {
     updatedById: +user.id,
   };
 
-  if (formData.id) {
-    await prisma.beerLog.update({
-      where: { id: +formData.id, userId },
-      data,
-    });
-  } else {
-    await prisma.beerLog.create({
-      data: {
-        ...data,
-        userId,
-        createdAt: new Date(),
-        createdById: +user.id,
-      } as BeerLog,
-    });
+  try {
+    if (formData.id) {
+      await prisma.beerLog.update({
+        where: { id: +formData.id, userId },
+        data,
+      });
+    } else {
+      await prisma.beerLog.create({
+        data: {
+          ...data,
+          userId,
+          createdAt: new Date(),
+          createdById: +user.id,
+        } as BeerLog,
+      });
+    }
+  } catch (error) {
+    console.error('[saveLog] Database error:', error);
+    return {
+      ok: false,
+      formError: 'Failed to save log entry. Please try again.',
+      values: formData,
+    };
   }
 
   return { ok: true };

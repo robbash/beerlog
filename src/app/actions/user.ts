@@ -1,10 +1,11 @@
 'use server';
 
-import { signIn } from '@/lib/server/auth';
+import { auth, signIn } from '@/lib/server/auth';
 import { sendEmail } from '@/lib/server/email';
 import { prisma } from '@/lib/server/prisma';
 import { isRedirectError } from 'next/dist/client/components/redirect-error';
 import { getApprovalEmail } from '@/lib/server/email-templates';
+import { Roles } from '@/lib/constants';
 
 export type LoginFormState = {
   error: string | undefined;
@@ -42,6 +43,12 @@ export async function userEmailExists(email: string) {
 }
 
 export async function setUserApproved(id: number, approved: boolean) {
+  const session = await auth();
+
+  if (!session || session.user?.role === Roles.User) {
+    return false;
+  }
+
   const user = await prisma.user.update({ data: { approved }, where: { id } });
 
   if (user.approved === approved) {
@@ -50,7 +57,7 @@ export async function setUserApproved(id: number, approved: boolean) {
         firstName: user.firstName,
         locale: (user.locale as 'en' | 'de') || 'en',
       });
-      sendEmail(user.email, approvalEmail.subject, approvalEmail.body);
+      await sendEmail(user.email, approvalEmail.subject, approvalEmail.body);
     }
     return true;
   }
@@ -59,6 +66,12 @@ export async function setUserApproved(id: number, approved: boolean) {
 }
 
 export async function deleteUser(id: number) {
+  const session = await auth();
+
+  if (!session || session.user?.role === Roles.User) {
+    return false;
+  }
+
   const [, user] = await prisma.$transaction([
     prisma.beerLog.deleteMany({ where: { userId: id } }),
     prisma.user.delete({ where: { id } }),
