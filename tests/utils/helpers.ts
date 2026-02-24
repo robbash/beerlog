@@ -1,9 +1,9 @@
 import { prisma } from '@/lib/server/prisma';
 
 export async function resetDatabase() {
-  prisma.paymentAllocation.deleteMany();
-  prisma.payment.deleteMany({});
-  prisma.beerLog.deleteMany();
-  prisma.user.deleteMany();
-  prisma.auditLog.deleteMany();
+  await prisma.paymentAllocation.deleteMany();
+  await prisma.payment.deleteMany({});
+  await prisma.beerLog.deleteMany();
+  await prisma.user.deleteMany();
+  await prisma.auditLog.deleteMany();
 }
