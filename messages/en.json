@@ -177,7 +177,7 @@
     },
     "dashboardToggle": {
       "showRanking": "Show the current ranking",
-      "showOwn": "Only display own consuption",
+      "showOwn": "Only display own consumption",
       "showAll": "Display consumption for all users"
     },
     "dashboardUserFilter": {
