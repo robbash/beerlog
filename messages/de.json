@@ -5,7 +5,7 @@
   "pages": {
     "dashboard": {
       "loginHint": "Bitte melde dich an um loszulegen.",
-      "logForOthers": "Log drinks for other users"
+      "logForOthers": "Getränke für andere Benutzer eintragen"
     },
     "login": {
       "title": "Login",
@@ -44,7 +44,7 @@
       },
       "success": "Wenn ein Konto mit dieser E-Mail-Adresse existiert, erhältst du in Kürze einen Link zum Zurücksetzen des Passworts.",
       "error": {
-        "title": "Error",
+        "title": "Fehler",
         "message": "Fehler beim Senden der E-Mail. Bitte versuche es erneut."
       },
       "button": {
@@ -64,7 +64,7 @@
       },
       "success": "Dein Passwort wurde erfolgreich zurückgesetzt. Du wirst zum Login weitergeleitet...",
       "error": {
-        "title": "Error",
+        "title": "Fehler",
         "message": "Fehler beim Zurücksetzen des Passworts. Bitte versuche es erneut."
       },
       "button": {
@@ -83,7 +83,7 @@
       "form": {
         "date": "Datum",
         "quantity": "Anzahl",
-        "userId": "Benuzter",
+        "userId": "Benutzer",
         "userIdPlaceholder": "Wähle einen Benutzer aus"
       },
       "error": {
@@ -305,7 +305,7 @@
   },
   "errors": {
     "password": {
-      "minLength": "Das Passwort muss mindestens ${length} Zeichen lang sein",
+      "minLength": "Das Passwort muss mindestens 6 Zeichen lang sein",
       "specialCharacter": "Das Passwort muss mindestens ein Sonderzeichen enthalten",
       "lowerCase": "Das Passwort muss mindestens einen Kleinbuchstaben enthalten",
       "upperCase": "Das Passwort muss mindestens einen Großbuchstaben enthalten",

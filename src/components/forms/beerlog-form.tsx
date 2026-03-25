@@ -184,9 +184,11 @@ export function BeerLogForm(props: Props) {
                 </div>
 
                 <Input
+                  id="quantity"
                   name="quantity"
                   type="number"
                   value={formQuantity}
+                  readOnly
                   required
                   className="text-center"
                 />
