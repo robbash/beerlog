@@ -7,6 +7,7 @@ import { format } from 'date-fns';
 import { humanDateFormat } from '@/lib/constants';
 import { getLogPaymentStatus } from '@/lib/shared/payments';
 import { IconCurrencyEuro, IconCurrencyEuroOff, IconEdit } from '@tabler/icons-react';
+import { Volleyball } from 'lucide-react';
 import { BeerLog, PaymentAllocation, User } from '@prisma/client';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
@@ -27,13 +28,23 @@ export function DashboardTableRow({ log, locale, user, isGrouped = false }: Prop
 
   const editLink = `/${locale}/log/${log.date}`;
   const paymentStatus = getLogPaymentStatus(log);
+  const isSummerGames = log.summerGamesParticipationId != null;
 
   return (
     <TableRow className={isGrouped ? 'text-muted-foreground' : ''}>
       <TableCell className={cn('py-4 font-medium', isGrouped ? 'pl-8' : '')}>
         {format(new Date(log.date), humanDateFormat)}
       </TableCell>
-      <TableCell>{log.quantity}</TableCell>
+      <TableCell>
+        {isSummerGames ? (
+          <span className="inline-flex items-center gap-1 text-green-700" title={t('summerGames')}>
+            <Volleyball className="size-4" />
+            <span className="text-xs uppercase">{t('summerGames')}</span>
+          </span>
+        ) : (
+          log.quantity
+        )}
+      </TableCell>
       {user && (
         <TableCell>
           {user?.firstName} {user?.lastName}
@@ -58,7 +69,7 @@ export function DashboardTableRow({ log, locale, user, isGrouped = false }: Prop
         )}
       </TableCell>
       <TableCell className="text-right">
-        {log.isPaidFor ? (
+        {log.isPaidFor || isSummerGames ? (
           <Button variant="outline" disabled>
             <IconEdit />
           </Button>

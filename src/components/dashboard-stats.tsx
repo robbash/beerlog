@@ -4,6 +4,7 @@ import {
   IconTrendingDown,
   IconCreditCard,
 } from '@tabler/icons-react';
+import { Volleyball } from 'lucide-react';
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { getFormatter, getLocale, getTranslations } from 'next-intl/server';
 import { getBeerPriceCents } from '@/lib/server/settings';
@@ -24,6 +25,7 @@ interface Props {
     netBalanceCents: number;
   };
   currentUserRank: number | null;
+  summerGamesActive?: boolean;
 }
 
 export async function DashboardStats(props: Props) {
@@ -34,6 +36,7 @@ export async function DashboardStats(props: Props) {
     trendThisMonth,
     userBalance,
     currentUserRank,
+    summerGamesActive = false,
   } = props;
   const pricePerBeer = await getBeerPriceCents();
 
@@ -155,27 +158,60 @@ export async function DashboardStats(props: Props) {
         </CardHeader>
       </Card>
 
-      <Card className="@container/card border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 py-3 transition-shadow hover:shadow-md dark:border-amber-800 dark:from-amber-950/20 dark:to-orange-950/20">
-        <CardHeader>
-          <CardTitle className="flex justify-center">
-            <Link href={`/${locale}/log/today`} className="group flex flex-col items-center gap-2">
-              <div className="relative">
-                <div className="absolute inset-0 rounded-full bg-amber-400/20 blur-xl transition-colors group-hover:bg-amber-400/30" />
-                <Image
-                  src="/beerlog-icon.png"
-                  alt="Add drink"
-                  width={64}
-                  height={64}
-                  className="relative drop-shadow-lg transition-transform duration-200 group-hover:scale-110"
-                />
-              </div>
-              <span className="text-sm font-semibold text-amber-900 transition-colors group-hover:text-amber-700 dark:text-amber-100 dark:group-hover:text-amber-200">
-                {t('cards.addDrink.title')}
-              </span>
-            </Link>
-          </CardTitle>
-        </CardHeader>
-      </Card>
+      {summerGamesActive ? (
+        <Card className="@container/card border-green-200 bg-gradient-to-br from-green-50 to-emerald-50 py-3 transition-shadow hover:shadow-md dark:border-green-800 dark:from-green-950/20 dark:to-emerald-950/20">
+          <CardHeader>
+            <CardTitle className="flex flex-col items-center gap-2">
+              <Link
+                href={`/${locale}/log-participation`}
+                className="group flex flex-col items-center gap-2"
+              >
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-full bg-green-400/20 blur-xl transition-colors group-hover:bg-green-400/30" />
+                  <Volleyball
+                    className="relative size-16 text-green-600 drop-shadow-lg transition-transform duration-200 group-hover:scale-110"
+                    strokeWidth={1.5}
+                  />
+                </div>
+                <span className="text-sm font-semibold text-green-900 transition-colors group-hover:text-green-700 dark:text-green-100 dark:group-hover:text-green-200">
+                  {t('cards.summerGames.title')}
+                </span>
+              </Link>
+              <Link
+                href={`/${locale}/log/today`}
+                className="text-muted-foreground text-xs underline-offset-4 hover:underline"
+              >
+                {t('cards.summerGames.logDrinkFallback')}
+              </Link>
+            </CardTitle>
+          </CardHeader>
+        </Card>
+      ) : (
+        <Card className="@container/card border-amber-200 bg-gradient-to-br from-amber-50 to-orange-50 py-3 transition-shadow hover:shadow-md dark:border-amber-800 dark:from-amber-950/20 dark:to-orange-950/20">
+          <CardHeader>
+            <CardTitle className="flex justify-center">
+              <Link
+                href={`/${locale}/log/today`}
+                className="group flex flex-col items-center gap-2"
+              >
+                <div className="relative">
+                  <div className="absolute inset-0 rounded-full bg-amber-400/20 blur-xl transition-colors group-hover:bg-amber-400/30" />
+                  <Image
+                    src="/beerlog-icon.png"
+                    alt="Add drink"
+                    width={64}
+                    height={64}
+                    className="relative drop-shadow-lg transition-transform duration-200 group-hover:scale-110"
+                  />
+                </div>
+                <span className="text-sm font-semibold text-amber-900 transition-colors group-hover:text-amber-700 dark:text-amber-100 dark:group-hover:text-amber-200">
+                  {t('cards.addDrink.title')}
+                </span>
+              </Link>
+            </CardTitle>
+          </CardHeader>
+        </Card>
+      )}
     </div>
   );
 }

@@ -121,9 +121,6 @@ importers:
       eslint-config-next:
         specifier: 15.5.3
         version: 15.5.3(eslint@9.35.0(jiti@2.5.1))(typescript@5.9.2)
-      nodemailer^6.6.5:
-        specifier: link:@types/nodemailer^6.6.5
-        version: link:@types/nodemailer^6.6.5
       prettier:
         specifier: ^3.6.2
         version: 3.6.2

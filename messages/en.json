@@ -141,6 +141,59 @@
     "users": {
       "title": "Users",
       "description": "Manage user accounts and permissions"
+    },
+    "admin": {
+      "settings": {
+        "title": "System settings",
+        "description": "Configure global behaviour of BeerLog.",
+        "success": "Settings updated successfully",
+        "error": {
+          "title": "Error"
+        },
+        "beerPrice": {
+          "title": "Beer price",
+          "description": "Price charged per drink at the moment it is logged.",
+          "label": "Price per drink (EUR)"
+        },
+        "summerGames": {
+          "title": "Summer Games",
+          "description": "Configure the annual Summer Games period. During the period, the primary action becomes 'I was there', and the ranking counts participations instead of drinks.",
+          "startDate": "Start date",
+          "startDateHint": "Leave empty to disable Summer Games. The period spans full ISO weeks starting with the week that contains this date.",
+          "durationWeeks": "Duration (weeks)",
+          "fee": "Fee per participation (EUR)"
+        },
+        "button": {
+          "submit": "Save settings"
+        }
+      }
+    },
+    "summerGames": {
+      "title": "Summer Games",
+      "description": "Tap to log your participation for this week.",
+      "form": {
+        "date": "Session date",
+        "dateFirstUserHint": "You're the first this week — pick the day the session actually happened. Everyone else will join that same day.",
+        "dateLocked": "Someone else already set the session date for this week.",
+        "fee": "Fee",
+        "userId": "User",
+        "userIdPlaceholder": "Select a user"
+      },
+      "alreadyLogged": "This user is already logged for this week.",
+      "success": "You're in the game! Cheers.",
+      "error": {
+        "title": "Error",
+        "notActive": "Summer Games are not currently active.",
+        "notAuthorised": "You cannot log participations for other users.",
+        "onlyCurrentWeek": "Regular users can only log the current ISO week.",
+        "weekOutsidePeriod": "That week is outside the configured Summer Games period.",
+        "notInWeek": "The session date must fall inside the target week.",
+        "saveFailed": "Failed to save. Please try again."
+      },
+      "button": {
+        "submit": "I was there",
+        "cancel": "Cancel"
+      }
     }
   },
   "components": {
@@ -162,6 +215,10 @@
         },
         "addDrink": {
           "title": "Log a Drink"
+        },
+        "summerGames": {
+          "title": "I was there",
+          "logDrinkFallback": "Log a drink instead"
         }
       }
     },
@@ -173,7 +230,15 @@
         "name": "Name",
         "drinks": "Drinks"
       },
-      "you": "You"
+      "you": "You",
+      "summerGames": {
+        "title": "Summer Games leaderboard",
+        "description": "Most participations this period",
+        "subtitle": "Sun, sand, podium.",
+        "headers": {
+          "participations": "Sessions"
+        }
+      }
     },
     "dashboardToggle": {
       "showRanking": "Show the current ranking",
@@ -211,7 +276,8 @@
         "paid": "Fully paid",
         "partial": "Partially paid: {allocated}/{total} cents",
         "unpaid": "Unpaid"
-      }
+      },
+      "summerGames": "Summer Games"
     },
     "datePicker": {
       "pickADate": "Pick a date"
@@ -270,6 +336,7 @@
     "register": "Register",
     "users": "Users",
     "payments": "Payments",
+    "admin": "Settings",
     "greetings": "Hey {name}",
     "language": "Language"
   },
@@ -301,7 +368,8 @@
     }
   },
   "formFooter": {
-    "hint": "Cheers"
+    "hint": "Cheers",
+    "summerHint": "Beach ya later"
   },
   "errors": {
     "password": {

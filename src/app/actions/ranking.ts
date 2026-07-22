@@ -1,34 +1,76 @@
 import { prisma } from '@/lib/server/prisma';
 import { getCurrentMonthStart } from '@/lib/utils/date';
+import { getSummerGamesState } from '@/lib/server/summer-games';
+import { toDateString } from '@/lib/shared/summer-games';
 
-export async function getCurrentRank(userId: number) {
-  const currentMonthStart = getCurrentMonthStart();
+export type RankingMode = 'monthly' | 'summerGames';
 
-  const rankingData = await prisma.beerLog.groupBy({
-    by: ['userId'],
-    where: {
-      date: { gte: currentMonthStart },
-    },
-    _sum: {
-      quantity: true,
-    },
-    orderBy: [
-      {
-        _sum: {
-          quantity: 'desc',
+export interface RankingEntry {
+  userId: number;
+  userName: string;
+  quantity: number;
+  rank: number;
+}
+
+export interface RankingsResult {
+  mode: RankingMode;
+  entries: RankingEntry[];
+}
+
+async function computeRankingRows(mode: RankingMode) {
+  if (mode === 'summerGames') {
+    const state = await getSummerGamesState();
+    if (!state.period) return [];
+
+    const start = toDateString(state.period.startDate);
+    const end = toDateString(state.period.endDate);
+
+    // Count participations per user within the period via the joined session.
+    const participations = await prisma.summerGamesParticipation.findMany({
+      where: {
+        session: {
+          sessionDate: { gte: start, lte: end },
         },
       },
-      {
-        userId: 'asc', // Stable secondary sort
-      },
-    ],
-  });
+      select: { userId: true },
+    });
 
-  if (rankingData.length === 0) {
-    return null;
+    const counts = new Map<number, number>();
+    for (const p of participations) {
+      counts.set(p.userId, (counts.get(p.userId) ?? 0) + 1);
+    }
+
+    return Array.from(counts.entries())
+      .map(([userId, count]) => ({ userId, _sum: { quantity: count } }))
+      .sort((a, b) => {
+        const q = (b._sum.quantity ?? 0) - (a._sum.quantity ?? 0);
+        return q !== 0 ? q : a.userId - b.userId;
+      });
   }
 
-  // Calculate rank with proper tie handling
+  // Monthly drink ranking — exclude Summer Games rows so the two systems
+  // don't cross-pollute.
+  return prisma.beerLog.groupBy({
+    by: ['userId'],
+    where: {
+      date: { gte: getCurrentMonthStart() },
+      summerGamesParticipationId: null,
+    },
+    _sum: { quantity: true },
+    orderBy: [{ _sum: { quantity: 'desc' } }, { userId: 'asc' }],
+  });
+}
+
+async function resolveMode(): Promise<RankingMode> {
+  const state = await getSummerGamesState();
+  return state.isActive ? 'summerGames' : 'monthly';
+}
+
+export async function getCurrentRank(userId: number): Promise<number | null> {
+  const mode = await resolveMode();
+  const rankingData = await computeRankingRows(mode);
+  if (rankingData.length === 0) return null;
+
   let currentRank = 1;
   const rankings = rankingData.map((entry, index) => {
     if (index > 0 && entry._sum.quantity !== rankingData[index - 1]._sum.quantity) {
@@ -41,52 +83,27 @@ export async function getCurrentRank(userId: number) {
     };
   });
 
-  // Find user's rank (top 3 only get medal)
   const userRanking = rankings.find((r) => r.userId === userId);
   if (!userRanking) return null;
-
-  // Only return rank if in top 3
   return userRanking.rank <= 3 ? userRanking.rank : null;
 }
 
-export async function getRankings() {
-  const currentMonthStart = getCurrentMonthStart();
-
-  const rankingData = await prisma.beerLog.groupBy({
-    by: ['userId'],
-    where: {
-      date: { gte: currentMonthStart },
-    },
-    _sum: {
-      quantity: true,
-    },
-    orderBy: [
-      {
-        _sum: {
-          quantity: 'desc',
-        },
-      },
-      {
-        userId: 'asc', // Stable secondary sort
-      },
-    ],
-  });
+export async function getRankings(): Promise<RankingsResult> {
+  const mode = await resolveMode();
+  const rankingData = await computeRankingRows(mode);
 
   if (rankingData.length === 0) {
-    return [];
+    return { mode, entries: [] };
   }
 
-  // Fetch user details for the ranking
   const rankingUserIds = rankingData.map((entry) => entry.userId);
   const rankingUsers = await prisma.user.findMany({
     where: { id: { in: rankingUserIds } },
     select: { id: true, firstName: true, lastName: true },
   });
 
-  // Calculate rank with proper tie handling (competition ranking)
   let currentRank = 1;
-  const rankings = rankingData.map((entry, index) => {
-    // When quantity changes, update rank to current position + 1
+  const rankings: RankingEntry[] = rankingData.map((entry, index) => {
     if (index > 0 && entry._sum.quantity !== rankingData[index - 1]._sum.quantity) {
       currentRank = index + 1;
     }
@@ -101,6 +118,5 @@ export async function getRankings() {
     };
   });
 
-  // Return top 10 entries
-  return rankings.slice(0, 10);
+  return { mode, entries: rankings.slice(0, 10) };
 }

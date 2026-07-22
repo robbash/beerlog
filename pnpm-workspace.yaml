@@ -1,3 +1,11 @@
+allowBuilds:
+  '@prisma/client': false
+  '@prisma/engines': false
+  '@tailwindcss/oxide': false
+  esbuild: false
+  prisma: false
+  sharp: false
+  unrs-resolver: false
 overrides:
   esbuild@<=0.24.2: '>=0.25.0'
   js-yaml@>=4.0.0 <4.1.1: '>=4.1.1'

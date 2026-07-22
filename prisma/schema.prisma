@@ -14,42 +14,74 @@ enum Role {
 }
 
 model User {
-  id                  Int                  @id @default(autoincrement())
-  firstName           String
-  lastName            String
-  email               String               @unique
-  passwordHash        String
-  role                Role                 @default(USER)
-  approved            Boolean              @default(false)
-  mfaEnabled          Boolean              @default(false)
-  mfaSecret           String?
-  locale              String               @default("en")
-  createdAt           DateTime             @default(now())
-  updatedAt           DateTime             @updatedAt
-  beerLogs            BeerLog[]
-  payments            Payment[]
-  auditLogs           AuditLog[]           @relation("AuditActor")
-  creates             BeerLog[]            @relation("CreatedBy")
-  updates             BeerLog[]            @relation("UpdatedBy")
-  paymentsRecorded    Payment[]            @relation("RecordedBy")
-  passwordResetTokens PasswordResetToken[]
+  id                               Int                        @id @default(autoincrement())
+  firstName                        String
+  lastName                         String
+  email                            String                     @unique
+  passwordHash                     String
+  role                             Role                       @default(USER)
+  approved                         Boolean                    @default(false)
+  mfaEnabled                       Boolean                    @default(false)
+  mfaSecret                        String?
+  locale                           String                     @default("en")
+  createdAt                        DateTime                   @default(now())
+  updatedAt                        DateTime                   @updatedAt
+  beerLogs                         BeerLog[]
+  payments                         Payment[]
+  auditLogs                        AuditLog[]                 @relation("AuditActor")
+  creates                          BeerLog[]                  @relation("CreatedBy")
+  updates                          BeerLog[]                  @relation("UpdatedBy")
+  paymentsRecorded                 Payment[]                  @relation("RecordedBy")
+  passwordResetTokens              PasswordResetToken[]
+  summerGamesParticipations        SummerGamesParticipation[] @relation("SgpUser")
+  summerGamesParticipationsCreated SummerGamesParticipation[] @relation("SgpCreatedBy")
+  summerGamesSessionsCreated       SummerGamesSession[]       @relation("SgsCreatedBy")
 }
 
 model BeerLog {
-  id                 Int                 @id @default(autoincrement())
-  userId             Int
-  quantity           Int
-  date               String
-  costCentsAtTime    Int
-  isPaidFor          Boolean             @default(false)
-  createdAt          DateTime            @default(now())
-  updatedAt          DateTime            @updatedAt
-  user               User                @relation(fields: [userId], references: [id])
-  createdBy          User?               @relation("CreatedBy", fields: [createdById], references: [id])
-  createdById        Int?
-  updatedBy          User?               @relation("UpdatedBy", fields: [updatedById], references: [id])
-  updatedById        Int?
-  paymentAllocations PaymentAllocation[]
+  id                         Int                       @id @default(autoincrement())
+  userId                     Int
+  quantity                   Int
+  date                       String
+  costCentsAtTime            Int
+  isPaidFor                  Boolean                   @default(false)
+  createdAt                  DateTime                  @default(now())
+  updatedAt                  DateTime                  @updatedAt
+  user                       User                      @relation(fields: [userId], references: [id])
+  createdBy                  User?                     @relation("CreatedBy", fields: [createdById], references: [id])
+  createdById                Int?
+  updatedBy                  User?                     @relation("UpdatedBy", fields: [updatedById], references: [id])
+  updatedById                Int?
+  paymentAllocations         PaymentAllocation[]
+  summerGamesParticipationId Int?                      @unique
+  summerGamesParticipation   SummerGamesParticipation? @relation(fields: [summerGamesParticipationId], references: [id])
+}
+
+model SummerGamesSession {
+  id             Int                        @id @default(autoincrement())
+  isoYear        Int
+  isoWeek        Int
+  sessionDate    String
+  createdById    Int
+  createdAt      DateTime                   @default(now())
+  createdBy      User                       @relation("SgsCreatedBy", fields: [createdById], references: [id])
+  participations SummerGamesParticipation[]
+
+  @@unique([isoYear, isoWeek])
+}
+
+model SummerGamesParticipation {
+  id          Int                @id @default(autoincrement())
+  sessionId   Int
+  userId      Int
+  createdById Int
+  createdAt   DateTime           @default(now())
+  session     SummerGamesSession @relation(fields: [sessionId], references: [id])
+  user        User               @relation("SgpUser", fields: [userId], references: [id])
+  createdBy   User               @relation("SgpCreatedBy", fields: [createdById], references: [id])
+  beerLog     BeerLog?
+
+  @@unique([sessionId, userId])
 }
 
 model AuditLog {

@@ -15,6 +15,7 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { getCurrentMonthStart } from '@/lib/utils/date';
 import { getCurrentRank, getRankings } from '../actions/ranking';
+import { getSummerGamesState } from '@/lib/server/summer-games';
 
 export default async function Page({
   searchParams,
@@ -74,18 +75,22 @@ export default async function Page({
 
   const hasMore = logsTotal.length > limit;
   const logs = hasMore ? logsTotal.slice(0, limit) : logsTotal;
-  const quantityTotal = (
-    await prisma.beerLog.aggregate({
-      where: { ...userIdFilter },
-      orderBy: { date: 'desc' },
-      _sum: { quantity: true },
-    })
-  )._sum.quantity!;
+  // Exclude Summer Games participation rows from drink stats — they are
+  // charges, not drinks.
+  const drinksOnly = { ...userIdFilter, summerGamesParticipationId: null };
+  const quantityTotal =
+    (
+      await prisma.beerLog.aggregate({
+        where: drinksOnly,
+        orderBy: { date: 'desc' },
+        _sum: { quantity: true },
+      })
+    )._sum.quantity || 0;
   const quantityPrevMonth =
     (
       await prisma.beerLog.aggregate({
         where: {
-          ...userIdFilter,
+          ...drinksOnly,
           date: {
             gte: format(subMonths(startOfMonth(new Date()), 1), dateFormat),
             lt: currentMonthStart,
@@ -94,12 +99,13 @@ export default async function Page({
         _sum: { quantity: true },
       })
     )._sum.quantity || 0;
-  const quantityThisMonth = (
-    await prisma.beerLog.aggregate({
-      where: { ...userIdFilter, date: { gte: format(startOfMonth(new Date()), dateFormat) } },
-      _sum: { quantity: true },
-    })
-  )._sum.quantity!;
+  const quantityThisMonth =
+    (
+      await prisma.beerLog.aggregate({
+        where: { ...drinksOnly, date: { gte: format(startOfMonth(new Date()), dateFormat) } },
+        _sum: { quantity: true },
+      })
+    )._sum.quantity || 0;
 
   let trendThisMonth = ((quantityThisMonth - quantityPrevMonth) / (quantityPrevMonth || 0)) * 100;
   if (trendThisMonth === Infinity) {
@@ -118,6 +124,8 @@ export default async function Page({
   const userBalance = await getUserBalanceDetails(filterUserId || +session.user.id);
 
   const currentUserRank = await getCurrentRank(balanceUserId);
+  const summerGamesState = await getSummerGamesState();
+  const rankings = selectedView === 'ranking' ? await getRankings() : null;
   const availableViews = ['own', 'ranking'] as ViewType[];
   if (allowShowAll) {
     availableViews.push('all');
@@ -133,6 +141,7 @@ export default async function Page({
           trendThisMonth={trendThisMonth}
           userBalance={userBalance}
           currentUserRank={currentUserRank}
+          summerGamesActive={summerGamesState.isActive}
         />
       </div>
 
@@ -153,10 +162,11 @@ export default async function Page({
         </div>
       </div>
 
-      {selectedView === 'ranking' && (
+      {selectedView === 'ranking' && rankings && (
         <div className="mb-6">
           <DashboardRanking
-            rankings={await getRankings()}
+            rankings={rankings.entries}
+            mode={rankings.mode}
             currentUserId={balanceUserId}
             isAdminOrManager={allowShowAll}
           />

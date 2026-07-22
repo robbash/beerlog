@@ -141,6 +141,59 @@
     "users": {
       "title": "Benutzer",
       "description": "Benutzerkonten und Berechtigungen verwalten"
+    },
+    "admin": {
+      "settings": {
+        "title": "Systemeinstellungen",
+        "description": "Globale Einstellungen für BeerLog verwalten.",
+        "success": "Einstellungen erfolgreich gespeichert",
+        "error": {
+          "title": "Fehler"
+        },
+        "beerPrice": {
+          "title": "Getränkepreis",
+          "description": "Preis pro Getränk zum Zeitpunkt der Erfassung.",
+          "label": "Preis pro Getränk (EUR)"
+        },
+        "summerGames": {
+          "title": "Ferienspiele",
+          "description": "Konfiguriere den jährlichen Zeitraum der Ferienspiele. Während dieser Zeit wird 'Ich war dabei' zur Hauptaktion und die Rangliste zählt Teilnahmen statt Getränken.",
+          "startDate": "Startdatum",
+          "startDateHint": "Leer lassen, um die Ferienspiele zu deaktivieren. Der Zeitraum umfasst ganze ISO-Wochen ab der Woche, die dieses Datum enthält.",
+          "durationWeeks": "Dauer (Wochen)",
+          "fee": "Gebühr pro Teilnahme (EUR)"
+        },
+        "button": {
+          "submit": "Einstellungen speichern"
+        }
+      }
+    },
+    "summerGames": {
+      "title": "Ferienspiele",
+      "description": "Tippe, um deine Teilnahme für diese Woche zu erfassen.",
+      "form": {
+        "date": "Termindatum",
+        "dateFirstUserHint": "Du bist als erster dran diese Woche — wähle den Tag, an dem die Ferienspiele tatsächlich stattfanden. Alle anderen werden diesem Tag zugeordnet.",
+        "dateLocked": "Für diese Woche wurde der Termin bereits von jemand anderem festgelegt.",
+        "fee": "Gebühr",
+        "userId": "Benutzer",
+        "userIdPlaceholder": "Wähle einen Benutzer aus"
+      },
+      "alreadyLogged": "Dieser Benutzer ist für diese Woche bereits erfasst.",
+      "success": "Du bist dabei! Zum Wohl.",
+      "error": {
+        "title": "Fehler",
+        "notActive": "Die Ferienspiele sind aktuell nicht aktiv.",
+        "notAuthorised": "Du kannst keine Teilnahmen für andere Benutzer erfassen.",
+        "onlyCurrentWeek": "Reguläre Benutzer können nur die aktuelle ISO-Woche erfassen.",
+        "weekOutsidePeriod": "Diese Woche liegt außerhalb des konfigurierten Ferienspiel-Zeitraums.",
+        "notInWeek": "Das Termindatum muss innerhalb der Zielwoche liegen.",
+        "saveFailed": "Speichern fehlgeschlagen. Bitte versuche es erneut."
+      },
+      "button": {
+        "submit": "Ich war dabei",
+        "cancel": "Abbrechen"
+      }
     }
   },
   "components": {
@@ -162,6 +215,10 @@
         },
         "addDrink": {
           "title": "Getränk eintragen"
+        },
+        "summerGames": {
+          "title": "Ich war dabei",
+          "logDrinkFallback": "Doch lieber ein Getränk erfassen"
         }
       }
     },
@@ -173,7 +230,15 @@
         "name": "Name",
         "drinks": "Getränke"
       },
-      "you": "Du"
+      "you": "Du",
+      "summerGames": {
+        "title": "Ferienspiele-Bestenliste",
+        "description": "Meiste Teilnahmen in diesem Zeitraum",
+        "subtitle": "Sonne, Sand, Siegertreppchen.",
+        "headers": {
+          "participations": "Teilnahmen"
+        }
+      }
     },
     "dashboardToggle": {
       "showRanking": "Aktuelle Wertung anzeigen",
@@ -211,7 +276,8 @@
         "paid": "Vollständig bezahlt",
         "partial": "Teilweise bezahlt: {allocated}/{total} Cent",
         "unpaid": "Unbezahlt"
-      }
+      },
+      "summerGames": "Ferienspiele"
     },
     "datePicker": {
       "pickADate": "Wähle ein Datum"
@@ -270,6 +336,7 @@
     "register": "Registrieren",
     "users": "Benutzer",
     "payments": "Zahlungen",
+    "admin": "Einstellungen",
     "greetings": "Hey {name}",
     "language": "Sprache"
   },
@@ -301,7 +368,8 @@
     }
   },
   "formFooter": {
-    "hint": "Zum Wohl"
+    "hint": "Zum Wohl",
+    "summerHint": "Ab ins Freibad"
   },
   "errors": {
     "password": {

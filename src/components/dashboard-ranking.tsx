@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table';
 import { useTranslations } from 'next-intl';
 import { cn } from '@/lib/utils';
-import { Eye, Trophy } from 'lucide-react';
+import { Eye, Trophy, Volleyball } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
@@ -25,11 +25,18 @@ interface Props {
   rankings: RankingEntry[];
   currentUserId: number;
   isAdminOrManager?: boolean;
+  mode?: 'monthly' | 'summerGames';
 }
 
-export function DashboardRanking({ rankings, currentUserId, isAdminOrManager = false }: Props) {
+export function DashboardRanking({
+  rankings,
+  currentUserId,
+  isAdminOrManager = false,
+  mode = 'monthly',
+}: Props) {
   const t = useTranslations('components.dashboardRanking');
   const [isRevealing, setIsRevealing] = useState(false);
+  const isSummer = mode === 'summerGames';
 
   const getRankIcon = (rank: number) => {
     if (rank === 1) return '🥇';
@@ -48,11 +55,18 @@ export function DashboardRanking({ rankings, currentUserId, isAdminOrManager = f
       <div className="p-2">
         <div className="flex items-center justify-between">
           <div>
-            <div className="flex items-center gap-2">
-              <Trophy className="size-4" />
-              {t('title')}
+            <div className={cn('flex items-center gap-2', isSummer && 'text-green-700')}>
+              {isSummer ? <Volleyball className="size-4" /> : <Trophy className="size-4" />}
+              {isSummer ? t('summerGames.title') : t('title')}
             </div>
-            <div className="text-muted-foreground text-sm">{t('description')}</div>
+            <div className="text-muted-foreground text-sm">
+              {isSummer ? t('summerGames.description') : t('description')}
+            </div>
+            {isSummer && (
+              <div className="mt-1 text-xs text-green-700/70 italic">
+                {t('summerGames.subtitle')}
+              </div>
+            )}
           </div>
 
           {isAdminOrManager && (
@@ -77,7 +91,9 @@ export function DashboardRanking({ rankings, currentUserId, isAdminOrManager = f
           <TableRow>
             <TableHead className="w-16">{t('headers.rank')}</TableHead>
             <TableHead>{t('headers.name')}</TableHead>
-            <TableHead className="text-right">{t('headers.drinks')}</TableHead>
+            <TableHead className="text-right">
+              {isSummer ? t('summerGames.headers.participations') : t('headers.drinks')}
+            </TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>

@@ -13,22 +13,36 @@ function isChristmasSeason(): boolean {
   return month === 11 && day >= 1 && day <= 26;
 }
 
-export function FormFooter() {
+type Mode = 'christmas' | 'summerGames' | 'default';
+
+interface Props {
+  summerGamesActive?: boolean;
+}
+
+export function FormFooter({ summerGamesActive = false }: Props) {
   const t = useTranslations('formFooter');
   const [isAnimating, setIsAnimating] = useState(false);
-  const isChristmas = isChristmasSeason();
+
+  const mode: Mode = isChristmasSeason()
+    ? 'christmas'
+    : summerGamesActive
+      ? 'summerGames'
+      : 'default';
 
   const handleClick = () => {
-    // Trigger animation
     setIsAnimating(true);
 
-    // Play appropriate sound based on season
-    const soundFile = isChristmas ? '/sounds/merry-xmas.m4a' : '/sounds/chink.m4a';
+    const soundFile =
+      mode === 'christmas'
+        ? '/sounds/merry-xmas.m4a'
+        : mode === 'summerGames'
+          ? '/sounds/summer.m4a'
+          : '/sounds/chink.m4a';
+
     const audio = new Audio(soundFile);
     audio.volume = 0.5;
     audio.play().catch((err) => console.log('Audio play failed:', err));
 
-    // Reset animation after it completes
     setTimeout(() => setIsAnimating(false), 600);
   };
 
@@ -41,8 +55,10 @@ export function FormFooter() {
       onKeyDown={(e) => e.key === 'Enter' && handleClick()}
     >
       <div className="flex items-center justify-center gap-2">
-        {isChristmas ? (
+        {mode === 'christmas' ? (
           <span className={`text-xl ${isAnimating ? 'animate-shake' : ''}`}>🎄</span>
+        ) : mode === 'summerGames' ? (
+          <span className={`text-xl ${isAnimating ? 'animate-shake' : ''}`}>🏖️</span>
         ) : (
           <Image
             src="/beerlog-icon.png"
@@ -52,7 +68,7 @@ export function FormFooter() {
             className={isAnimating ? 'animate-shake' : ''}
           />
         )}
-        <span>{t('hint')}</span>
+        <span>{mode === 'summerGames' ? t('summerHint') : t('hint')}</span>
       </div>
     </div>
   );

@@ -13,10 +13,15 @@ interface Props {
   defaultValue?: Date;
   onSelect?: (date: Date) => void;
   disabled?: boolean;
+  /**
+   * Custom predicate for disabling individual calendar days.
+   * If omitted, defaults to "up to today, at most one month back".
+   */
+  disabledDate?: (date: Date) => boolean;
 }
 
 export default function DatePicker(props: Props) {
-  const { defaultValue, disabled = false, onSelect } = props;
+  const { defaultValue, disabled = false, onSelect, disabledDate } = props;
 
   const [date, setDate] = React.useState<Date | undefined>(defaultValue);
   const [isCalendarOpen, setIsCalendarOpen] = React.useState(false);
@@ -43,7 +48,9 @@ export default function DatePicker(props: Props) {
       <PopoverContent className="w-auto p-0">
         <Calendar
           weekStartsOn={1}
-          disabled={(date) => date > new Date() || date < subMonths(new Date(), 1)}
+          disabled={
+            disabledDate ?? ((date) => date > new Date() || date < subMonths(new Date(), 1))
+          }
           mode="single"
           selected={date}
           onSelect={(d) => {

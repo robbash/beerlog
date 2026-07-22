@@ -4,9 +4,11 @@ import { FormFooter } from '@/components/forms/form-footer';
 import Link from 'next/link';
 import { CircleUser } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
+import { getSummerGamesState } from '@/lib/server/summer-games';
 
 export default async function PlainLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const t = await getTranslations('app');
+  const summerGames = await getSummerGamesState();
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
@@ -22,7 +24,7 @@ export default async function PlainLayout({ children }: Readonly<{ children: Rea
 
           {children}
 
-          <FormFooter />
+          <FormFooter summerGamesActive={summerGames.isActive} />
         </div>
       </div>
     </div>
