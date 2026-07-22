@@ -30,7 +30,7 @@ To contain the AI, I run it in Docker. Check [OpenCode in Docker](https://github
 First, run the development server:
 
 ```bash
-pnpm dev prisma migrate deploy
+pnpm prisma migrate deploy
 ```
 
 ## Database migrations
