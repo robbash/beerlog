@@ -5,7 +5,7 @@ import { Roles } from '@/lib/constants';
 import { logSchema } from '@/lib/forms.schema';
 import { prisma } from '@/lib/server/prisma';
 import { getBeerPriceCents } from '@/lib/server/settings';
-import { BeerLog } from '@prisma/client';
+import { BeerLog, Prisma } from '@prisma/client';
 
 export type Result = {
   ok: boolean;
@@ -65,16 +65,45 @@ export async function saveLog(formData: BeerLogFormData): Promise<Result> {
         data,
       });
     } else {
-      await prisma.beerLog.create({
-        data: {
-          ...data,
+      // Upsert on (userId, date) to prevent duplicate rows from double
+      // submissions / retries. On conflict we increment quantity + cost
+      // rather than create a second row for the same day.
+      const quantity = parsed.data.quantity!;
+      const addedCostCents = quantity * beerPriceCents;
+
+      await prisma.beerLog.upsert({
+        where: { userId_date: { userId, date: parsed.data.date! } },
+        create: {
           userId,
+          date: parsed.data.date!,
+          quantity,
+          costCentsAtTime: addedCostCents,
           createdAt: new Date(),
+          updatedAt: new Date(),
           createdById: +user.id,
-        } as BeerLog,
+          updatedById: +user.id,
+        },
+        update: {
+          quantity: { increment: quantity },
+          costCentsAtTime: { increment: addedCostCents },
+          updatedAt: new Date(),
+          updatedById: +user.id,
+        },
       });
     }
   } catch (error) {
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === 'P2002'
+    ) {
+      return {
+        ok: false,
+        formError:
+          'A log entry for this user and date already exists. Please edit that entry instead.',
+        values: formData,
+      };
+    }
+
     console.error('[saveLog] Database error:', error);
     return {
       ok: false,

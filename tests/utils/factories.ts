@@ -25,6 +25,14 @@ export async function createUser(data?: {
 }
 
 /**
+ * Monotonic counter so consecutive `createBeerLog` calls that don't pass a
+ * `date` get distinct dates — required since BeerLog has a unique
+ * constraint on (userId, date). Callers that care about a specific date
+ * should still pass it explicitly.
+ */
+let beerLogDateCounter = 0;
+
+/**
  * Create a test beer log
  */
 export async function createBeerLog(data: {
@@ -35,11 +43,18 @@ export async function createBeerLog(data: {
 }) {
   const { quantity = 1 } = data;
 
+  // Generate a unique historical date per call when the test doesn't care
+  // about which date it is. Starts at 2000-01-01 and marches forward.
+  const autoDate = format(
+    new Date(2000, 0, 1 + beerLogDateCounter++),
+    'yyyy-MM-dd',
+  );
+
   return await prisma.beerLog.create({
     data: {
       userId: data.userId,
       quantity,
-      date: data.date || format(new Date(), 'yyyy-MM-dd'),
+      date: data.date || autoDate,
       costCentsAtTime: quantity * 100,
       isPaidFor: data.isPaidFor || false,
     },

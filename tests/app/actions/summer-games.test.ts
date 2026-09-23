@@ -190,12 +190,16 @@ describe('getRankings during Summer Games', () => {
     mockAuth({ id: bob.id, role: Roles.User });
     await logParticipation({ sessionDate: today });
 
-    // Bob also drinks a load of beers — must NOT count during summer games
+    // Bob also drinks a load of beers on a different day — must NOT count
+    // during summer games. Uses a separate date to satisfy the
+    // (userId, date) unique constraint (his participation created a shadow
+    // BeerLog for `today`).
+    const otherDay = format(addDays(new Date(), -1), dateFormat);
     await prisma.beerLog.create({
       data: {
         userId: bob.id,
         quantity: 99,
-        date: today,
+        date: otherDay,
         costCentsAtTime: 9900,
       },
     });

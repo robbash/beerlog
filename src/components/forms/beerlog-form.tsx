@@ -93,6 +93,9 @@ export function BeerLogForm(props: Props) {
 
       setSuccess(t('success'));
 
+      // Intentionally keep isLoading=true so the submit button stays
+      // disabled until we navigate away. This prevents a second tap
+      // during the success delay from creating a duplicate entry.
       setTimeout(() => {
         router.push('/');
       }, 1500);
@@ -100,7 +103,6 @@ export function BeerLogForm(props: Props) {
       setError((error as Error).message);
 
       console.error(error);
-    } finally {
       setIsLoading(false);
     }
   }

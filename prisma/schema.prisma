@@ -55,6 +55,8 @@ model BeerLog {
   paymentAllocations         PaymentAllocation[]
   summerGamesParticipationId Int?                      @unique
   summerGamesParticipation   SummerGamesParticipation? @relation(fields: [summerGamesParticipationId], references: [id])
+
+  @@unique([userId, date])
 }
 
 model SummerGamesSession {
