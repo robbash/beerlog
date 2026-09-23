@@ -1,14 +1,18 @@
 allowBuilds:
+  '@parcel/watcher': true
   '@prisma/client': false
   '@prisma/engines': false
+  '@swc/core': true
   '@tailwindcss/oxide': false
   esbuild: false
   prisma: false
   sharp: false
   unrs-resolver: false
 overrides:
-  esbuild@<=0.24.2: '>=0.25.0'
-  js-yaml@>=4.0.0 <4.1.1: '>=4.1.1'
-  next-auth@>=5.0.0-beta.0 <5.0.0-beta.30: '>=5.0.0-beta.30'
-  next@>=15.5.0-canary.0 <15.5.7: '>=15.5.7'
-  nodemailer@<7.0.7: '>=7.0.7'
+  deepmerge-ts@<8.0.0: '>=8.0.0 <9.0.0'
+  esbuild@<=0.24.2: '>=0.25.0 <0.26.0'
+  js-yaml@>=4.0.0 <4.1.1: '>=4.1.1 <5.0.0'
+  next-auth@>=5.0.0-beta.0 <5.0.0-beta.32: 5.0.0-beta.32
+  next@>=15.5.0-canary.0 <15.5.7: '>=15.5.7 <16.0.0'
+  nodemailer@<9.1.1: '>=9.1.1 <10.0.0'
+  postcss@<8.5.23: '>=8.5.23 <9.0.0'

@@ -1,7 +1,12 @@
 import { defineConfig } from 'vitest/config';
 import path from 'path';
 
+const dirname = import.meta.dirname;
+
 export default defineConfig({
+  // Point envDir at ./tests (which has no .env) so Vite 8 doesn't auto-load the app's
+  // .env file into the test process. Tests don't consume env vars (see tests/setup.ts).
+  envDir: path.resolve(dirname, './tests'),
   test: {
     globals: true,
     environment: 'node',
@@ -16,7 +21,7 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './src'),
+      '@': path.resolve(dirname, './src'),
     },
   },
 });
