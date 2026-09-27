@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { AlertCircleIcon, LoaderCircle } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useRouter } from 'next/navigation';
 import { allocatePayments, recordPayment } from '@/app/actions/payment';
 import { User } from '@prisma/client';
@@ -28,6 +28,7 @@ export function PaymentForm(props: Props) {
   const { users, selectedUserId } = props;
 
   const t = useTranslations('pages.payment');
+  const locale = useLocale();
   const router = useRouter();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -69,7 +70,7 @@ export function PaymentForm(props: Props) {
       setSuccess(t('success'));
 
       setTimeout(() => {
-        router.push('/users');
+        router.push(`/${locale}/users`);
       }, 1500);
     } catch (error) {
       setError((error as Error).message);
@@ -147,7 +148,7 @@ export function PaymentForm(props: Props) {
               type="button"
               className="w-full"
               variant="secondary"
-              onClick={() => router.push('/users')}
+              onClick={() => router.push(`/${locale}/users`)}
             >
               {t('button.cancel')}
             </Button>

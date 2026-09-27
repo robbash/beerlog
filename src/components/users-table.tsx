@@ -36,7 +36,7 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Button } from './ui/button';
 import { deleteUser, setUserApproved } from '@/app/actions/user';
-import { useTranslations } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { Roles } from '@/lib/constants';
 import {
   AlertDialog,
@@ -69,6 +69,7 @@ export function UsersTable(props: Props) {
   const [isModalOpen, setModalOpen] = useState(false);
 
   const t = useTranslations('components.usersTable');
+  const locale = useLocale();
 
   const formatCurrency = (cents: number) => {
     return new Intl.NumberFormat('en-US', {
@@ -172,7 +173,7 @@ export function UsersTable(props: Props) {
                     <DropdownMenuContent className="w-56" align="end">
                       <DropdownMenuGroup>
                         <DropdownMenuItem asChild>
-                          <Link href={`/payment?userId=${user.id}`}>
+                          <Link href={`/${locale}/payment?userId=${user.id}`}>
                             <HandCoins /> {t('actions.recordPayment')}
                           </Link>
                         </DropdownMenuItem>
