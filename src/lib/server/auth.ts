@@ -78,7 +78,7 @@ const providers = [
       return {
         id: String(user.id),
         firstName: user.firstName,
-        lastName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         role: user.role,
         approved: user.approved,
