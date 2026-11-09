@@ -10,7 +10,7 @@
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
-    "seed": "node prisma/seed.cjs",
+    "seed": "node prisma/seed.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "eslint",
     "test": "vitest",
