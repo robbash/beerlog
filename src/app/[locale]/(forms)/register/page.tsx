@@ -1,18 +1,22 @@
 import { RegisterForm } from '@/components/forms/register-form';
 import { auth } from '@/lib/server/auth';
+import { redirectUriParam } from '@/lib/constants';
+import { localRedirectPath } from '@/lib/utils/url';
+import { getLocale } from 'next-intl/server';
 import { redirect } from 'next/navigation';
 
 export default async function Page({
   searchParams,
 }: {
-  searchParams: Promise<{ redirect_uri: string | undefined }>;
+  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
-  const { redirect_uri: redirectUri } = await searchParams;
+  const params = await searchParams;
+  const redirectUri = localRedirectPath(params[redirectUriParam]);
 
   const session = await auth();
 
   if (session) {
-    redirect(redirectUri ?? '/');
+    redirect(redirectUri ?? `/${await getLocale()}`);
   }
 
   return <RegisterForm />;

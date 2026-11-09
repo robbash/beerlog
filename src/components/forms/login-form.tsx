@@ -10,6 +10,8 @@ import { FormEvent, useState } from 'react';
 import { AlertCircleIcon, LoaderCircle } from 'lucide-react';
 import { Alert, AlertDescription } from '../ui/alert';
 import { loginAction } from '@/app/actions/user';
+import { redirectUriParam } from '@/lib/constants';
+import { localRedirectPath } from '@/lib/utils/url';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 export function LoginForm() {
@@ -40,9 +42,9 @@ export function LoginForm() {
       return;
     }
 
-    const uri = params.get('redirect-uri');
+    const uri = localRedirectPath(params.get(redirectUriParam));
 
-    router.push(uri ?? '/');
+    router.push(uri ?? `/${locale}`);
     router.refresh();
   }
 

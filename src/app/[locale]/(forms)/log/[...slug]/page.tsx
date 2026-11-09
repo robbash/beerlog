@@ -1,6 +1,13 @@
 import { BeerLogForm } from '@/components/forms/beerlog-form';
 import { auth } from '@/lib/server/auth';
-import { dateFormat, dateRegex, logFormNewForUser, logFormToday, Roles } from '@/lib/constants';
+import {
+  dateFormat,
+  dateRegex,
+  logFormNewForUser,
+  logFormToday,
+  redirectUriParam,
+  Roles,
+} from '@/lib/constants';
 import { prisma } from '@/lib/server/prisma';
 import { User } from '@prisma/client';
 import { redirect } from 'next/navigation';
@@ -20,7 +27,7 @@ export default async function Page({ params }: Props) {
   const session = await auth();
   if (!session) {
     return redirect(
-      `/${locale}/login?redirect-uri=${encodeURIComponent(`/${locale}/log/${selector}`)}`,
+      `/${locale}/login?${redirectUriParam}=${encodeURIComponent(`/${locale}/log/${selector}`)}`,
     );
   }
 

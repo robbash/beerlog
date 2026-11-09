@@ -23,3 +23,5 @@ export const humanDateFormat = 'dd.MM.yyyy';
 
 export const logFormToday = 'today';
 export const logFormNewForUser = 'new-for-user';
+
+export const redirectUriParam = 'redirect-uri';

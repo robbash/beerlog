@@ -1,5 +1,5 @@
 import { auth } from '@/lib/server/auth';
-import { Roles, logFormNewForUser } from '@/lib/constants';
+import { Roles, logFormNewForUser, redirectUriParam } from '@/lib/constants';
 import { prisma } from '@/lib/server/prisma';
 import { redirect } from 'next/navigation';
 import { getLocale, getTranslations } from 'next-intl/server';
@@ -24,7 +24,7 @@ export default async function Page({ params }: Props) {
   const session = await auth();
   if (!session) {
     return redirect(
-      `/${locale}/login?redirect-uri=${encodeURIComponent(`/${locale}/log-participation`)}`,
+      `/${locale}/login?${redirectUriParam}=${encodeURIComponent(`/${locale}/log-participation`)}`,
     );
   }
 
