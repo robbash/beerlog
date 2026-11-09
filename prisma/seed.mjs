@@ -2,6 +2,8 @@ import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 const prisma = new PrismaClient();
 
+const DEFAULT_ADMIN_PASSWORD = 'AdminPassword123$';
+
 async function main() {
   await prisma.setting.upsert({
     where: { key: 'beerPriceCents' },
@@ -13,10 +15,8 @@ async function main() {
   const ex = await prisma.user.findUnique({ where: { email } });
 
   if (!ex) {
-    const passwordHash = await bcrypt.hash(
-      process.env.INITIAL_ADMIN_PASSWORD || 'AdminPassword123$',
-      10,
-    );
+    const password = process.env.INITIAL_ADMIN_PASSWORD || DEFAULT_ADMIN_PASSWORD;
+    const passwordHash = await bcrypt.hash(password, 10);
 
     await prisma.user.create({
       data: {
@@ -28,7 +28,13 @@ async function main() {
         approved: true,
       },
     });
-    console.log('Admin: admin@example.com / admin123');
+
+    // Report the password that was actually set, but never echo a custom one.
+    const shown = process.env.INITIAL_ADMIN_PASSWORD
+      ? 'the value of INITIAL_ADMIN_PASSWORD'
+      : password;
+
+    console.log(`Admin created: ${email} / ${shown}`);
   }
 }
 
