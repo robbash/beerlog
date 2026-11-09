@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 import { Loader2 } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface Props {
   hasMore: boolean;
@@ -15,22 +15,20 @@ export function DashboardLoadMore({ hasMore, currentLimit }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const t = useTranslations('components.dashboardLoadMore');
-  const [isLoading, setIsLoading] = useState(false);
+  const [requestedLimit, setRequestedLimit] = useState<number | null>(null);
 
-  // Reset loading state when currentLimit changes (indicating new data has loaded)
-  useEffect(() => {
-    setIsLoading(false);
-  }, [currentLimit]);
+  // Still loading as long as the limit we navigated to has not arrived as a prop yet
+  const isLoading = requestedLimit !== null && requestedLimit !== currentLimit;
 
   if (!hasMore) {
     return null;
   }
 
   const handleLoadMore = () => {
-    setIsLoading(true);
     const params = new URLSearchParams(searchParams.toString());
     const newLimit = currentLimit + 20;
     params.set('limit', String(newLimit));
+    setRequestedLimit(newLimit);
     router.push(`?${params.toString()}`);
   };
 

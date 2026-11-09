@@ -1,7 +1,8 @@
 import createMiddleware from 'next-intl/middleware';
 import { routing } from '@/i18n/routing';
 
-// Must stay named `middleware.ts` on Next.js 15 — `proxy.ts` is only picked up from Next.js 16 on.
+// `proxy.ts` is the Next.js 16+ filename for what used to be `middleware.ts`.
+// The import path stays `next-intl/middleware` — next-intl did not rename it.
 export default createMiddleware(routing);
 
 export const config = {
