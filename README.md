@@ -27,11 +27,17 @@ To contain the AI, I run it in Docker. Check [OpenCode in Docker](https://github
 
 ## Development
 
-First, run the development server:
+Create a `.env` with at least `DATABASE_URL` and `NEXTAUTH_SECRET`
+(`openssl rand -base64 32`), then:
 
 ```bash
+pnpm install
 pnpm prisma migrate deploy
+pnpm seed # optional, creates admin@example.com
+pnpm dev
 ```
+
+The app runs on http://localhost:3000.
 
 ## Database migrations
 
