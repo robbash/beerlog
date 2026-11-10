@@ -27,10 +27,8 @@ To contain the AI, I run it in Docker. Check [OpenCode in Docker](https://github
 
 ## Development
 
-Create a `.env` with at least `DATABASE_URL` and `NEXTAUTH_SECRET`
-(`openssl rand -base64 32`), then:
-
 ```bash
+cp .env.example .env # fill in DATABASE_URL and NEXTAUTH_SECRET
 pnpm install
 pnpm prisma migrate deploy
 pnpm seed # optional, creates admin@example.com
