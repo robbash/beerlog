@@ -35,17 +35,25 @@ pnpm prisma migrate deploy
 
 ## Database migrations
 
-At the moment there's no production migrations. Please configure your dev env to
-point to the live database, and run the migration manually.
+Migrations are applied automatically when the container starts. The entrypoint
+runs `prisma migrate deploy` against `DATABASE_URL` before the app boots, so
+deploying a new image brings its schema with it. Only migrations that have not
+been applied yet are run, and the container exits instead of serving with an
+out-of-date schema if they fail.
 
-```
-pnpm exec
+Set `RUN_MIGRATIONS=false` to skip the step, for example when a separate job
+owns migrations or the app's database user may not alter the schema.
+
+To apply them by hand against a database you can reach:
+
+```bash
+pnpm prisma migrate deploy
 ```
 
 ## Building
 
 ```
-docker build -f infra/docker/Dockerfile --platform=linux/amd64,linux/arm64 -t <your-image-tag> .
+docker build -f infra/Dockerfile --platform=linux/amd64,linux/arm64 -t <your-image-tag> .
 ```
 
 ## Deployment
