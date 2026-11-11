@@ -398,7 +398,9 @@
     "reminders": "Erinnerungen",
     "admin": "Einstellungen",
     "greetings": "Hey {name}",
-    "language": "Sprache"
+    "language": "Sprache",
+    "menu": "Menü",
+    "close": "Menü schließen"
   },
   "settings": {
     "language": {

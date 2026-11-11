@@ -2,15 +2,16 @@ import '@/app/globals.css';
 
 import { NextIntlClientProvider } from 'next-intl';
 import Link from 'next/link';
-import { auth, signOut } from '@/lib/server/auth';
+import { auth } from '@/lib/server/auth';
 import { Button } from '@/components/ui/button';
 import { Metadata, Viewport } from 'next';
 import { Globals, Roles } from '@/lib/constants';
 import { getTranslations } from 'next-intl/server';
 import Image from 'next/image';
-import { Wallet, Users as UsersIcon, Settings as SettingsIcon, Bell } from 'lucide-react';
 import { Toaster } from '@/components/ui/sonner';
 import { LanguageSelector } from '@/components/language-selector';
+import { MobileNav } from '@/components/mobile-nav';
+import { logout } from '@/app/actions/auth';
 
 export const metadata: Metadata = {
   title: Globals.title,
@@ -37,6 +38,8 @@ export default async function Layout({
 
   const session = await auth();
 
+  const isPrivileged = session?.user?.role === Roles.Admin || session?.user?.role === Roles.Manager;
+
   return (
     <html lang={locale}>
       <body>
@@ -51,7 +54,7 @@ export default async function Layout({
                   height={24}
                   width={24}
                 />
-                <span className="hidden md:inline">{Globals.title}</span>
+                <span>{Globals.title}</span>
               </Link>
               <nav>
                 <div className="flex items-center gap-2">
@@ -63,56 +66,56 @@ export default async function Layout({
                         </div>
                       )}
 
-                      {(session?.user.role === Roles.Admin ||
-                        session?.user.role === Roles.Manager) && (
-                        <Link href={`/${locale}/payments`}>
-                          <Button variant="ghost" size="sm">
-                            <span className="hidden md:inline">{t('navigation.payments')}</span>
-                            <Wallet className="h-4 w-4 md:hidden" />
-                          </Button>
-                        </Link>
-                      )}
+                      <div className="hidden items-center gap-2 md:flex">
+                        {(session?.user.role === Roles.Admin ||
+                          session?.user.role === Roles.Manager) && (
+                          <>
+                            <Link href={`/${locale}/payments`}>
+                              <Button variant="ghost" size="sm">
+                                {t('navigation.payments')}
+                              </Button>
+                            </Link>
 
-                      {(session?.user.role === Roles.Admin ||
-                        session?.user.role === Roles.Manager) && (
-                        <Link href={`/${locale}/reminders`}>
-                          <Button variant="ghost" size="sm">
-                            <span className="hidden md:inline">{t('navigation.reminders')}</span>
-                            <Bell className="h-4 w-4 md:hidden" />
-                          </Button>
-                        </Link>
-                      )}
+                            <Link href={`/${locale}/reminders`}>
+                              <Button variant="ghost" size="sm">
+                                {t('navigation.reminders')}
+                              </Button>
+                            </Link>
+                          </>
+                        )}
 
-                      {session?.user.role === Roles.Admin && (
-                        <Link href={`/${locale}/users`}>
-                          <Button variant="ghost" size="sm">
-                            <span className="hidden md:inline">{t('navigation.users')}</span>
-                            <UsersIcon className="h-4 w-4 md:hidden" />
-                          </Button>
-                        </Link>
-                      )}
+                        {session?.user.role === Roles.Admin && (
+                          <>
+                            <Link href={`/${locale}/users`}>
+                              <Button variant="ghost" size="sm">
+                                {t('navigation.users')}
+                              </Button>
+                            </Link>
 
-                      {session?.user.role === Roles.Admin && (
-                        <Link href={`/${locale}/admin/settings`}>
-                          <Button variant="ghost" size="sm">
-                            <span className="hidden md:inline">{t('navigation.admin')}</span>
-                            <SettingsIcon className="h-4 w-4 md:hidden" />
-                          </Button>
-                        </Link>
-                      )}
+                            <Link href={`/${locale}/admin/settings`}>
+                              <Button variant="ghost" size="sm">
+                                {t('navigation.admin')}
+                              </Button>
+                            </Link>
+                          </>
+                        )}
+                      </div>
 
                       <LanguageSelector userId={+session.user.id} />
 
-                      <form
-                        action={async () => {
-                          'use server';
-                          await signOut();
-                        }}
-                      >
+                      {/* Users without extra sections get the logout button
+                          straight away rather than a one-item burger. */}
+                      <form action={logout} className={isPrivileged ? 'hidden md:block' : ''}>
                         <Button variant="outline" type="submit" size="sm">
                           {t('navigation.logout')}
                         </Button>
                       </form>
+
+                      {isPrivileged && (
+                        <div className="md:hidden">
+                          <MobileNav locale={locale} role={session.user.role} />
+                        </div>
+                      )}
                     </>
                   ) : (
                     <>
