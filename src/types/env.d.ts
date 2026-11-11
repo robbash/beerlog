@@ -21,5 +21,14 @@ declare namespace NodeJS {
 
     DEFAULT_BEER_PRICE_CENTS?: string;
     PAYPAL_ME_ID?: string;
+
+    APP_BASE_URL?: string;
+
+    /** Shared secret for /api/cron/*. Without it the cron endpoints stay closed. */
+    CRON_SECRET?: string;
+    /** Hours between two log reminders per person. Defaults to 4. */
+    LOG_REMINDER_INTERVAL_HOURS?: string;
+    /** Maximum reminders per person before a campaign gives up. Defaults to 6. */
+    LOG_REMINDER_MAX_COUNT?: string;
   }
 }

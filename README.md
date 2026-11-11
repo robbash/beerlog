@@ -54,6 +54,26 @@ To apply them by hand against a database you can reach:
 pnpm prisma migrate deploy
 ```
 
+## Log reminders
+
+Managers and admins can start a reminder campaign for an event date under
+`/{locale}/reminders`: pick the date, pick who was there (the list shows
+approved users without a log for that date, most frequent attendees first) and
+the app emails them every few hours until they either log their drinks or use
+the "I didn't drink" link in the mail.
+
+Sending is driven externally by the `beerlog-log-reminders` CronJob, which posts
+to `/api/cron/log-reminders` with a bearer token. The endpoint only sends what
+is actually due, so calling it more often than the reminder interval is safe.
+
+| Variable                      | Default | Purpose                                            |
+| ----------------------------- | ------- | -------------------------------------------------- |
+| `CRON_SECRET`                 | —       | Bearer token for `/api/cron/*`. Unset = closed.    |
+| `LOG_REMINDER_INTERVAL_HOURS` | `4`     | Hours between two reminders per person.            |
+| `LOG_REMINDER_MAX_COUNT`      | `6`     | Reminders per person before the campaign gives up. |
+
+`APP_BASE_URL` must be set for the links in the emails to work.
+
 ## Building
 
 ```

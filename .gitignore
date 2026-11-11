@@ -25,6 +25,7 @@
 # misc
 .DS_Store
 *.pem
+/.cache
 
 # debug
 npm-debug.log*
@@ -47,4 +48,4 @@ next-env.d.ts
 
 TODO.md
 
-infra/kubernetes/*
+infra/kubernetes/overlays/*

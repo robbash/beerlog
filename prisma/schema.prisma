@@ -36,6 +36,8 @@ model User {
   summerGamesParticipations        SummerGamesParticipation[] @relation("SgpUser")
   summerGamesParticipationsCreated SummerGamesParticipation[] @relation("SgpCreatedBy")
   summerGamesSessionsCreated       SummerGamesSession[]       @relation("SgsCreatedBy")
+  logReminderTargets               LogReminderTarget[]        @relation("LrtUser")
+  logRemindersCreated              LogReminder[]              @relation("LrCreatedBy")
 }
 
 model BeerLog {
@@ -84,6 +86,42 @@ model SummerGamesParticipation {
   beerLog     BeerLog?
 
   @@unique([sessionId, userId])
+}
+
+/// A nag campaign for a single event date: remind the selected attendees until
+/// they either log their drinks or declare that they had none.
+model LogReminder {
+  id          Int                 @id @default(autoincrement())
+  date        String              @unique
+  label       String?
+  active      Boolean             @default(true)
+  createdById Int
+  createdAt   DateTime            @default(now())
+  createdBy   User                @relation("LrCreatedBy", fields: [createdById], references: [id])
+  targets     LogReminderTarget[]
+}
+
+model LogReminderTarget {
+  id         Int         @id @default(autoincrement())
+  reminderId Int
+  userId     Int
+  /// Unguessable secret for the "I didn't drink" link, so the mail works
+  /// without a login.
+  token      String      @unique
+  sentCount  Int         @default(0)
+  lastSentAt DateTime?
+  /// When the next nag is due. The scheduler's work queue.
+  nextRunAt  DateTime
+  /// Set once a BeerLog exists for (userId, date).
+  resolvedAt DateTime?
+  /// Set when the user declared they had nothing to log.
+  noDrinksAt DateTime?
+  createdAt  DateTime    @default(now())
+  reminder   LogReminder @relation(fields: [reminderId], references: [id], onDelete: Cascade)
+  user       User        @relation("LrtUser", fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([reminderId, userId])
+  @@index([nextRunAt])
 }
 
 model AuditLog {

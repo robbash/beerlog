@@ -7,3 +7,5 @@ data:
   APP_BASE_URL: https://beerlog.example.org
   DEFAULT_BEER_PRICE_CENTS: "100"
   PAYPAL_ME_ID: ""
+  LOG_REMINDER_INTERVAL_HOURS: "4"
+  LOG_REMINDER_MAX_COUNT: "6"

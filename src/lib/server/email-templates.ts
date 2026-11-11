@@ -1,4 +1,6 @@
 import { getTranslations } from 'next-intl/server';
+import { format } from 'date-fns';
+import { humanDateFormat } from '@/lib/constants';
 
 type Locale = 'en' | 'de';
 
@@ -20,6 +22,15 @@ interface PasswordResetEmailParams {
   firstName: string;
   resetLink: string;
   expiryHours: number;
+  locale: Locale;
+}
+
+interface LogReminderEmailParams {
+  firstName: string;
+  eventDate: string;
+  eventLabel?: string | null;
+  logLink: string;
+  noDrinksLink: string;
   locale: Locale;
 }
 
@@ -61,5 +72,25 @@ export async function getPasswordResetEmail({
   return {
     subject: t('subject'),
     body: t('body', { firstName, resetLink, expiryHours }),
+  };
+}
+
+export async function getLogReminderEmail({
+  firstName,
+  eventDate,
+  eventLabel,
+  logLink,
+  noDrinksLink,
+  locale,
+}: LogReminderEmailParams) {
+  const t = await getTranslations({ locale, namespace: 'emails.logReminder' });
+
+  const event = format(new Date(`${eventDate}T00:00:00`), humanDateFormat);
+
+  return {
+    subject: eventLabel
+      ? t('subjectWithLabel', { event, label: eventLabel })
+      : t('subject', { event }),
+    body: t('body', { firstName, event, logLink, noDrinksLink }),
   };
 }

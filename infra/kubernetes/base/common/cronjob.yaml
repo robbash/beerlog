@@ -1,0 +1,33 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: log-reminders
+spec:
+  # Runs more often than the reminder interval; the endpoint only sends what is
+  # actually due, so a tighter schedule just lowers the delay.
+  schedule: "*/15 * * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 3
+  jobTemplate:
+    spec:
+      backoffLimit: 1
+      template:
+        spec:
+          restartPolicy: Never
+          containers:
+          - name: curl
+            image: curlimages/curl:8.11.1
+            env:
+            - name: CRON_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: beerlog-dotenv-secrets
+                  key: CRON_SECRET
+            command:
+            - sh
+            - -c
+            - >-
+              curl -sS --fail-with-body -X POST
+              -H "Authorization: Bearer $CRON_SECRET"
+              http://beerlog-service:3000/api/cron/log-reminders

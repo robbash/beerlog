@@ -168,6 +168,65 @@
         }
       }
     },
+    "reminders": {
+      "title": "Eintrags-Erinnerungen",
+      "description": "Nerve die Teilnehmer einer Veranstaltung, bis sie ihre Getränke eingetragen haben.",
+      "intervalHint": "Erinnerungen gehen alle {hours} Stunden raus, maximal {max} Mal pro Person. Eine Kampagne endet automatisch, sobald alle durch sind.",
+      "form": {
+        "title": "Neue Kampagne",
+        "date": "Datum der Veranstaltung",
+        "label": "Bezeichnung (optional)",
+        "labelPlaceholder": "Weihnachtsfeier",
+        "candidates": "Wer war dabei?",
+        "candidatesHint": "Bestätigte Benutzer ohne Eintrag für dieses Datum, häufigste Teilnehmer zuerst.",
+        "recentLogs": "{count} Einträge in den letzten 3 Monaten",
+        "selectAll": "Alle auswählen",
+        "clear": "Auswahl aufheben",
+        "empty": "Für dieses Datum haben schon alle etwas eingetragen.",
+        "submit": "Nerven starten",
+        "success": "Kampagne gestartet — {count} Personen hinzugefügt",
+        "noSelection": "Wähle mindestens eine Person aus.",
+        "error": {
+          "title": "Fehler"
+        }
+      },
+      "table": {
+        "caption": "Alle Erinnerungs-Kampagnen.",
+        "headers": {
+          "date": "Veranstaltung",
+          "progress": "Fortschritt",
+          "status": "Status",
+          "actions": ""
+        },
+        "status": {
+          "active": "Aktiv",
+          "stopped": "Gestoppt"
+        },
+        "progress": "{done} von {total} fertig",
+        "actions": {
+          "stop": "Stoppen",
+          "resume": "Fortsetzen",
+          "delete": "Entfernen"
+        },
+        "empty": "Noch keine Erinnerungs-Kampagnen.",
+        "confirmDelete": {
+          "title": "Kampagne entfernen",
+          "description": "Bist du sicher, dass du diese Kampagne entfernen möchtest? Das lässt sich nicht rückgängig machen!",
+          "button": {
+            "cancel": "Abbrechen",
+            "confirm": "Bestätigen"
+          }
+        }
+      }
+    },
+    "noDrinks": {
+      "title": "Nichts einzutragen?",
+      "description": "Bestätige, dass du am {event} nichts getrunken hast, dann hören wir auf zu erinnern.",
+      "confirm": "Ich habe nichts getrunken",
+      "done": "Danke! Du bist für den {event} von der Liste.",
+      "invalid": "Dieser Link ist nicht mehr gültig.",
+      "home": "Zurück zu BeerLog"
+    },
     "summerGames": {
       "title": "Ferienspiele",
       "description": "Tippe, um deine Teilnahme für diese Woche zu erfassen.",
@@ -336,6 +395,7 @@
     "register": "Registrieren",
     "users": "Benutzer",
     "payments": "Zahlungen",
+    "reminders": "Erinnerungen",
     "admin": "Einstellungen",
     "greetings": "Hey {name}",
     "language": "Sprache"
@@ -365,6 +425,11 @@
     "passwordReset": {
       "subject": "Passwort zurücksetzen",
       "body": "Hallo {firstName},\n\nDu hast angefordert, dein Passwort für deinen BeerLog-Account zurückzusetzen.\n\nBitte klicke auf den folgenden Link, um dein Passwort zurückzusetzen:\n{resetLink}\n\nDieser Link läuft in {expiryHours} Stunden ab.\n\nWenn du diese Anfrage nicht gestellt hast, ignoriere diese E-Mail bitte."
+    },
+    "logReminder": {
+      "subject": "Fehlt noch: deine Getränke vom {event}",
+      "subjectWithLabel": "Fehlt noch: deine Getränke von {label} ({event})",
+      "body": "Hallo {firstName},\n\nDu hast deine Getränke vom {event} noch nicht eingetragen. Sei ein guter Kamerad und mach es jetzt:\n{logLink}\n\nAn dem Tag nichts getrunken? Dann sag uns hier Bescheid und wir hören auf zu nerven:\n{noDrinksLink}\n\nZum Wohl!"
     }
   },
   "formFooter": {

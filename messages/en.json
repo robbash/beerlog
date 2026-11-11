@@ -168,6 +168,65 @@
         }
       }
     },
+    "reminders": {
+      "title": "Log reminders",
+      "description": "Nag the attendees of an event until they log their drinks.",
+      "intervalHint": "Reminders go out every {hours} hours, at most {max} times per person. A campaign stops by itself once everyone is done.",
+      "form": {
+        "title": "New campaign",
+        "date": "Event date",
+        "label": "Label (optional)",
+        "labelPlaceholder": "Christmas party",
+        "candidates": "Who was there?",
+        "candidatesHint": "Approved users without a log for this date, most frequent attendees first.",
+        "recentLogs": "{count} logs in the last 3 months",
+        "selectAll": "Select all",
+        "clear": "Clear selection",
+        "empty": "Everybody has already logged a drink for this date.",
+        "submit": "Start nagging",
+        "success": "Campaign started — {count} people added",
+        "noSelection": "Pick at least one person.",
+        "error": {
+          "title": "Error"
+        }
+      },
+      "table": {
+        "caption": "All reminder campaigns.",
+        "headers": {
+          "date": "Event",
+          "progress": "Progress",
+          "status": "Status",
+          "actions": ""
+        },
+        "status": {
+          "active": "Active",
+          "stopped": "Stopped"
+        },
+        "progress": "{done} of {total} done",
+        "actions": {
+          "stop": "Stop",
+          "resume": "Resume",
+          "delete": "Delete"
+        },
+        "empty": "No reminder campaigns yet.",
+        "confirmDelete": {
+          "title": "Delete campaign",
+          "description": "Are you sure you want to delete this campaign? This cannot be undone!",
+          "button": {
+            "cancel": "Cancel",
+            "confirm": "Confirm"
+          }
+        }
+      }
+    },
+    "noDrinks": {
+      "title": "Nothing to log?",
+      "description": "Confirm that you had no drinks on {event} and we will stop reminding you.",
+      "confirm": "I didn't drink anything",
+      "done": "Thanks! You are off the list for {event}.",
+      "invalid": "This link is not valid any more.",
+      "home": "Back to BeerLog"
+    },
     "summerGames": {
       "title": "Summer Games",
       "description": "Tap to log your participation for this week.",
@@ -336,6 +395,7 @@
     "register": "Register",
     "users": "Users",
     "payments": "Payments",
+    "reminders": "Reminders",
     "admin": "Settings",
     "greetings": "Hey {name}",
     "language": "Language"
@@ -365,6 +425,11 @@
     "passwordReset": {
       "subject": "Password Reset Request",
       "body": "Hello {firstName},\n\nYou have requested to reset your password for your BeerLog account.\n\nPlease click the following link to reset your password:\n{resetLink}\n\nThis link will expire in {expiryHours} hours.\n\nIf you did not request this password reset, please ignore this email."
+    },
+    "logReminder": {
+      "subject": "Still missing: your drinks from {event}",
+      "subjectWithLabel": "Still missing: your drinks from {label} ({event})",
+      "body": "Hey {firstName},\n\nYou haven't logged your drinks from {event} yet. Be a good sport and do it now:\n{logLink}\n\nDidn't drink anything that day? Then let us know here and we'll stop bugging you:\n{noDrinksLink}\n\nCheers!"
     }
   },
   "formFooter": {
