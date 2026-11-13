@@ -12,6 +12,7 @@ import { Toaster } from '@/components/ui/sonner';
 import { LanguageSelector } from '@/components/language-selector';
 import { MobileNav } from '@/components/mobile-nav';
 import { logout } from '@/app/actions/auth';
+import { version } from '../../../package.json';
 
 export const metadata: Metadata = {
   title: Globals.title,
@@ -42,7 +43,7 @@ export default async function Layout({
 
   return (
     <html lang={locale}>
-      <body>
+      <body className="flex min-h-svh flex-col">
         <NextIntlClientProvider>
           <header className="border-b bg-gray-100">
             <div className="container m-auto flex h-14 items-center justify-between px-3">
@@ -134,7 +135,10 @@ export default async function Layout({
               </nav>
             </div>
           </header>
-          <main className="container m-auto px-3 py-6">{children}</main>
+          <main className="container m-auto flex flex-1 flex-col px-3 py-6">{children}</main>
+          <footer className="text-muted-foreground px-3 pb-4 text-center text-xs">
+            v{version}
+          </footer>
           <Toaster />
         </NextIntlClientProvider>
       </body>
