@@ -30,5 +30,7 @@ declare namespace NodeJS {
     LOG_REMINDER_INTERVAL_HOURS?: string;
     /** Maximum reminders per person before a campaign gives up. Defaults to 6. */
     LOG_REMINDER_MAX_COUNT?: string;
+    /** Hour of day (0-23, Europe/Berlin) the first reminder may go out. Defaults to 8. */
+    LOG_REMINDER_FIRST_HOUR?: string;
   }
 }

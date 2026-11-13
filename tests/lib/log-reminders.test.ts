@@ -346,3 +346,94 @@ describe('markNoDrinks', () => {
     expect(await markNoDrinks('f'.repeat(64))).toEqual({ ok: false });
   });
 });
+
+describe('first reminder scheduling', () => {
+  // The team reads the app in Europe/Berlin, which is UTC+1 in November.
+  const eveningOfTheEvent = new Date('2026-11-13T19:30:00Z');
+  const theEventDate = '2026-11-13';
+  const nextMorning = '2026-11-14T07:00:00.000Z';
+
+  afterEach(async () => {
+    await resetDatabase();
+    delete process.env.LOG_REMINDER_FIRST_HOUR;
+    vi.clearAllMocks();
+  });
+
+  async function planDuringEvent(now = eveningOfTheEvent) {
+    const actor = await createUser({ role: 'ADMIN' });
+    const user = await createUser();
+
+    const { reminder } = await createLogReminder({
+      date: theEventDate,
+      userIds: [user.id],
+      actorId: actor.id,
+      now,
+    });
+
+    return { reminder, user };
+  }
+
+  it('schedules the first reminder for the morning after the event', async () => {
+    const { reminder } = await planDuringEvent();
+
+    const target = await prisma.logReminderTarget.findFirst({
+      where: { reminderId: reminder.id },
+    });
+
+    expect(target?.nextRunAt.toISOString()).toBe(nextMorning);
+  });
+
+  it('sends nothing while the event is still going on', async () => {
+    await planDuringEvent();
+
+    const result = await runDueLogReminders(new Date('2026-11-13T23:00:00Z'));
+
+    expect(result.sent).toBe(0);
+    expect(sentTo()).toEqual([]);
+  });
+
+  it('sends on the first tick after that morning', async () => {
+    const { user } = await planDuringEvent();
+
+    const result = await runDueLogReminders(new Date('2026-11-14T07:15:00Z'));
+
+    expect(result.sent).toBe(1);
+    expect(sentTo()).toEqual([user.email]);
+  });
+
+  it('is due straight away for an event entered days later', async () => {
+    const enteredLater = new Date('2026-11-20T10:00:00Z');
+    const { reminder } = await planDuringEvent(enteredLater);
+
+    const target = await prisma.logReminderTarget.findFirst({
+      where: { reminderId: reminder.id },
+    });
+
+    expect(target?.nextRunAt.toISOString()).toBe(enteredLater.toISOString());
+  });
+
+  it('honours LOG_REMINDER_FIRST_HOUR, midnight included', async () => {
+    process.env.LOG_REMINDER_FIRST_HOUR = '0';
+
+    const { reminder } = await planDuringEvent();
+
+    const target = await prisma.logReminderTarget.findFirst({
+      where: { reminderId: reminder.id },
+    });
+
+    // Midnight in Berlin, which is 23:00 UTC the day before.
+    expect(target?.nextRunAt.toISOString()).toBe('2026-11-13T23:00:00.000Z');
+  });
+
+  it('falls back to the default hour when the setting is nonsense', async () => {
+    process.env.LOG_REMINDER_FIRST_HOUR = 'half past nine';
+
+    const { reminder } = await planDuringEvent();
+
+    const target = await prisma.logReminderTarget.findFirst({
+      where: { reminderId: reminder.id },
+    });
+
+    expect(target?.nextRunAt.toISOString()).toBe(nextMorning);
+  });
+});

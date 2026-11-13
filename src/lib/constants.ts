@@ -17,6 +17,9 @@ export const Constants = {
 
 export const passwordMinLength = 6;
 
+/** The clock the team reads the app in; dates are stored without a zone. */
+export const appTimeZone = 'Europe/Berlin';
+
 export const dateRegex = /^\d{4}(-\d{2}){2}$/;
 export const dateFormat = 'yyyy-MM-dd';
 export const humanDateFormat = 'dd.MM.yyyy';

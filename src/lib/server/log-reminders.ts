@@ -4,10 +4,13 @@ import { prisma } from './prisma';
 import { sendEmail } from './email';
 import { getLogReminderEmail } from './email-templates';
 import { dateFormat } from '@/lib/constants';
+import { nextDayAtHour } from '@/lib/shared/timezone';
 
 export const LogReminderDefaults = {
   intervalHours: 4,
   maxCount: 6,
+  /** Hour of the day the first reminder may go out, read in `appTimeZone`. */
+  firstHour: 8,
   /** How far back `getReminderCandidates` looks when ranking by attendance. */
   rankingMonths: 3,
 } as const;
@@ -26,6 +29,33 @@ export function getLogReminderIntervalHours(): number {
 /** Hard cap on nags per person, so a campaign always ends by itself. */
 export function getLogReminderMaxCount(): number {
   return envInt(process.env.LOG_REMINDER_MAX_COUNT, LogReminderDefaults.maxCount);
+}
+
+/**
+ * Hour of the day the first reminder may be sent. Unlike the other settings
+ * this one may legitimately be 0 (midnight), so it is parsed separately.
+ */
+export function getLogReminderFirstHour(): number {
+  const raw = process.env.LOG_REMINDER_FIRST_HOUR;
+  if (!raw) return LogReminderDefaults.firstHour;
+
+  const hour = parseInt(raw, 10);
+
+  return Number.isInteger(hour) && hour >= 0 && hour <= 23 ? hour : LogReminderDefaults.firstHour;
+}
+
+/**
+ * When the first reminder for `date` may go out.
+ *
+ * Campaigns are usually planned during the event itself, but people log their
+ * drinks afterwards, so nagging them on the spot is pointless. The first
+ * reminder therefore waits until the morning after the event. A campaign
+ * started later than that is already overdue and goes out on the next tick.
+ */
+export function getFirstReminderRunAt(date: string, now: Date = new Date()): Date {
+  const earliest = nextDayAtHour(date, getLogReminderFirstHour());
+
+  return earliest > now ? earliest : now;
 }
 
 export interface ReminderCandidate {
@@ -114,14 +144,17 @@ export async function createLogReminder({
 
   const added = userIds.filter((userId) => !existingUserIds.has(userId));
 
+  // Not before the morning after the event, so nobody is nagged while still
+  // there. Already past for an event planned after the fact.
+  const nextRunAt = getFirstReminderRunAt(date, now);
+
   for (const userId of added) {
     await prisma.logReminderTarget.create({
       data: {
         reminderId: reminder.id,
         userId,
         token: crypto.randomBytes(32).toString('hex'),
-        // Due immediately — the first nag goes out on the next cron tick.
-        nextRunAt: now,
+        nextRunAt,
       },
     });
   }

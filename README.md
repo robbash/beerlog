@@ -62,6 +62,11 @@ approved users without a log for that date, most frequent attendees first) and
 the app emails them every few hours until they either log their drinks or use
 the "I didn't drink" link in the mail.
 
+A campaign can be planned during the event itself. Since people log their
+drinks afterwards, the first mail is held back until the morning after the
+event date (`LOG_REMINDER_FIRST_HOUR`, read in Europe/Berlin). Starting a
+campaign for an earlier date sends on the next tick, as before.
+
 Sending is driven externally by the `beerlog-log-reminders` CronJob, which posts
 to `/api/cron/log-reminders` with a bearer token. The endpoint only sends what
 is actually due, so calling it more often than the reminder interval is safe.
@@ -71,6 +76,7 @@ is actually due, so calling it more often than the reminder interval is safe.
 | `CRON_SECRET`                 | —       | Bearer token for `/api/cron/*`. Unset = closed.    |
 | `LOG_REMINDER_INTERVAL_HOURS` | `4`     | Hours between two reminders per person.            |
 | `LOG_REMINDER_MAX_COUNT`      | `6`     | Reminders per person before the campaign gives up. |
+| `LOG_REMINDER_FIRST_HOUR`     | `8`     | Earliest hour of day for the first reminder.       |
 
 `APP_BASE_URL` must be set for the links in the emails to work.
 
